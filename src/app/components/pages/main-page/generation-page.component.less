@@ -1,0 +1,40 @@
+@import 'src/styles';
+
+:host {
+    .container {
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        align-content: stretch;
+
+        .data {
+            display: inline-block;
+            background: white;
+            flex-grow: 1;
+        }
+        .generate {
+            background: @prim-color;
+
+            position: absolute;
+
+            height: 7em;
+            width: 7em;
+
+            border-radius: 50%;
+
+            margin: auto;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+
+        }
+        .template {
+            display: inline-block;
+            background: black;
+            flex-grow: 1;
+        }
+    }
+}
