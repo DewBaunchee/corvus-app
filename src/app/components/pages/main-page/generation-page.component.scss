@@ -1,4 +1,4 @@
-@import 'src/styles';
+@import 'src/styles.scss';
 
 :host {
     .container {
@@ -9,13 +9,30 @@
         align-items: stretch;
         align-content: stretch;
 
+        padding: 20px;
+        gap: 20px;
+
         .data {
-            display: inline-block;
-            background: white;
+            display: inline-flex;
+            background: $panel-color;
             flex-grow: 1;
+
+            padding: 20px;
+
+            .editor {
+                display: inline;
+                flex-grow: 1;
+
+                background: none;
+                border: none;
+
+                padding: 1em;
+                resize: none;
+            }
         }
+
         .generate {
-            background: @prim-color;
+            background: $prim-color;
 
             position: absolute;
 
@@ -31,9 +48,10 @@
             bottom: 0;
 
         }
+
         .template {
             display: inline-block;
-            background: black;
+            background: $panel-color;
             flex-grow: 1;
         }
     }

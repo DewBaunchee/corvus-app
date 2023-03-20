@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
 
-import { AppComponent } from './app.component';
-import { GenerationPageComponent } from './components/pages/main-page/generation-page.component';
-import { FileUploadDirective } from './components/directive/file-upload.directive';
+import { AppComponent } from "./app.component";
+import { GenerationPageComponent } from "./components/pages/main-page/generation-page.component";
+import { FileUploadDirective } from "./components/directive/file-upload.directive";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -11,9 +12,10 @@ import { FileUploadDirective } from './components/directive/file-upload.directiv
     GenerationPageComponent,
     FileUploadDirective
   ],
-  imports: [
-    BrowserModule
-  ],
+    imports: [
+        BrowserModule,
+        FormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

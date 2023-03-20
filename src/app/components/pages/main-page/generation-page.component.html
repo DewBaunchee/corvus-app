@@ -1,11 +1,15 @@
 <div class="container">
     <span class="data">
-
+        <textarea
+            class="editor"
+            placeholder="Enter your data..."
+            [(ngModel)]="data"
+        ></textarea>
     </span>
-    <span class="generate">
+<!--    <span class="generate">-->
 
-    </span>
-    <span class="template" fileUpload>
-
+<!--    </span>-->
+    <span class="template" fileUpload (files)="uploadTemplates($event)">
+        <div *ngFor="let template of service.templates() | async">{{template.name}}</div>
     </span>
 </div>

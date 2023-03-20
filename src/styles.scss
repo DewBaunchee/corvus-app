@@ -1,0 +1,29 @@
+@use '@angular/material' as mat;
+
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300;400;500;600;700;800;900&display=swap');
+@import 'custom-theme.scss';
+
+@include mat.core();
+
+$body-color: #333;
+$panel-color: #222;
+$prim-color: #764ebd;
+
+$text-color: #FFF;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family: Inconsolata, monospace;
+    color: $text-color;
+}
+
+body {
+    background: $body-color;
+}
+
+.custom-theme {
+    @include mat.all-component-themes($webapp-theme)
+}

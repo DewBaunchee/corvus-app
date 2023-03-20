@@ -31,7 +31,10 @@
                         "style": "kebab-case"
                     }
                 ],
-                "quotes": ["error", "double"]
+                "quotes": ["error", "double"],
+                "semi": "error",
+                "@typescript-eslint/typedef": "error",
+                "prefer-arrow-callback": "error"
             }
         },
         {
