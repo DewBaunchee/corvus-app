@@ -1,8 +1,10 @@
 import {Injectable} from "@angular/core";
-import {FileDecorator} from "../../../../models/file/file-decorator";
+import {FileDecorator} from "../../models/file/file-decorator";
 import {BehaviorSubject, Observable} from "rxjs";
-import {ReportTemplate} from "../../../../models/template/report-template";
-import {onChange, wait} from "../../../../util/rxjs";
+import {ReportTemplate} from "../../models/template/report-template";
+import {onChange, wait} from "../../util/rxjs";
+import {GenerationHttpService} from "./generation-http.service";
+import {NotificationService} from "../notification/notification.service";
 
 const lsDataKey = "generation-data";
 
@@ -15,7 +17,10 @@ export class GenerationPageService {
 
     private readonly _templates = new BehaviorSubject<ReportTemplate[]>([]);
 
-    constructor() {
+    constructor(
+        private readonly http: GenerationHttpService,
+        private readonly notification: NotificationService
+    ) {
         this._data.next(localStorage.getItem(lsDataKey) || "");
 
         this._data.pipe(
@@ -47,5 +52,15 @@ export class GenerationPageService {
 
     public data(): Observable<string> {
         return this._data.asObservable();
+    }
+
+    public generate() {
+        try {
+            const data = JSON.parse(this.getData());
+            const template = this.getTemplates()[0];
+            this.http.generateFrom(data, template);
+        } catch (error: unknown) {
+            this.notification.showError((error as Error).message);
+        }
     }
 }

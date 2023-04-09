@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from "@angular/core";
 import {FileDecorator} from "../../../models/file/file-decorator";
-import {GenerationPageService} from "./service/generation-page.service";
+import {GenerationPageService} from "../../../service/generation/generation-page.service";
 
 @Component({
     selector: "generation-page",
@@ -23,5 +23,9 @@ export class GenerationPageComponent {
 
     public uploadTemplates(files: FileDecorator[]) {
         this.service.addTemplates(files);
+    }
+
+    public generate() {
+        this.service.generate();
     }
 }
