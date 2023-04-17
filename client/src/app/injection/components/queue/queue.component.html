@@ -1,0 +1,63 @@
+<div class="queue">
+    <div class="header">
+        <span class="title">
+            Queue
+        </span>
+        <span class="queue-status-container">
+            <injection-status class="queue-status" [status]="queue.model.status"></injection-status>
+        </span>
+        <action-series [actions]="actions.list"></action-series>
+    </div>
+    <div class="body">
+        <div class="empty-queue" *ngIf="model.injections.length === 0"
+
+             fileUpload
+             mode="multiple"
+             allowedExtensions="docx"
+             [browseOnClick]="false"
+             (click)="createInjection()"
+        >
+            <span>Drop your templates here</span>
+            <span>or</span>
+            <span>Press to create injection</span>
+        </div>
+        <div class="queue-element" *ngFor="let injection of queue.injections">
+            <div class="queue-element-dnd-handler enabled">
+                <img ngSrc="assets/dnd-handler.svg" alt="D&D"
+                     width="16" height="16"
+                >
+            </div>
+            <div class="queue-element-body">
+                <injection-status class="status" [status]="injection.model.status"></injection-status>
+
+                <div class="data" *ngIf="!injection.model.dataSource"
+
+                     title="Drop your data file here or select it by click"
+
+                     fileUpload
+                     allowedExtensions="json"
+                     (file)="uploadData(injection.model.id, $event)"
+                >
+                    Data
+                </div>
+                <typed-source class="data" [source]="injection.model.dataSource" *ngIf="injection.model.dataSource">
+                </typed-source>
+
+                <div class="template" *ngIf="!injection.model.templateSource"
+
+                     title="Drop your template file here or select it by click"
+
+                     fileUpload
+                     allowedExtensions="docx"
+                     (file)="uploadTemplate(injection.model.id, $event)"
+                >
+                    Template
+                </div>
+                <typed-source class="template" [source]="injection.model.templateSource" *ngIf="injection.model.templateSource">
+                </typed-source>
+
+                <action-series [actions]="injection.actions.list"></action-series>
+            </div>
+        </div>
+    </div>
+</div>

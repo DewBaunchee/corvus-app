@@ -1,0 +1,8 @@
+<ng-container *ngIf="castedSource">
+    <span>
+        {{castedSource.name}}
+    </span>
+    <span *ngIf="castedSource.loadingProgress !== undefined && castedSource.loadingProgress !== 1">
+        {{castedSource.loadingProgress * 100}}%
+    </span>
+</ng-container>

@@ -1,0 +1,26 @@
+:host {
+
+    .panel {
+
+        display: flex;
+
+        align-items: flex-end;
+
+        padding: 5px;
+
+        .logo-container {
+            height: 30px;
+
+            padding: 5px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+
+            .logo {
+                height: 100%;
+            }
+        }
+    }
+}

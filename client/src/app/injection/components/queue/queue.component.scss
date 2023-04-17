@@ -1,0 +1,146 @@
+@import "src/styles";
+
+:host {
+
+    .queue {
+
+        display: flex;
+        flex-direction: column;
+
+        width: 100%;
+        gap: 20px;
+
+        .header {
+
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            .title {
+                font-size: 2.5em;
+                user-select: none;
+            }
+
+            .queue-status-container {
+                @extend .panel;
+
+                padding: 9px;
+
+                .queue-status {
+
+                }
+            }
+
+            action-series {
+                @extend .panel;
+
+                display: flex;
+
+                align-items: center;
+
+                flex-grow: 1;
+                gap: 10px;
+
+                padding: 5px;
+
+                app-action {
+                    height: 25px;
+                    width: 25px;
+                }
+            }
+        }
+
+        .body {
+
+            display: flex;
+            flex-direction: column;
+
+            flex-grow: 1;
+
+            gap: 10px;
+
+            .empty-queue {
+                @extend .panel;
+                @extend .drop-zone;
+
+                user-select: none;
+
+                display: flex;
+                flex-direction: column;
+
+                justify-content: center;
+                text-align: center;
+
+                gap: 5px;
+                flex-grow: 1;
+
+
+                background-color: rgba($panel-color, 0.03);
+                border: $panel-border-color 3px dashed;
+
+                box-shadow: none;
+
+                cursor: pointer;
+
+                span {
+                    font-size: 1.1em;
+                }
+            }
+
+            .queue-element {
+
+                display: flex;
+                align-items: center;
+
+                gap: 10px;
+                margin-left: -30px;
+
+                .queue-element-dnd-handler {
+
+                    visibility: hidden;
+
+                    &.enabled {
+                        cursor: grab;
+                    }
+                }
+
+                &:hover .queue-element-dnd-handler {
+                    visibility: visible;
+                }
+
+                .queue-element-body {
+                    @extend .panel;
+
+                    flex-grow: 1;
+
+                    display: flex;
+                    align-items: center;
+
+                    padding: 0 10px;
+                    gap: 10px;
+
+                    .status {
+                        height: 30px;
+                    }
+
+                    .data {
+                        @extend .drop-zone;
+
+                        flex-grow: 1;
+                    }
+
+                    .template {
+                        @extend .drop-zone;
+
+                        flex-grow: 1;
+                    }
+
+                    .action {
+
+                    }
+                }
+            }
+        }
+    }
+}

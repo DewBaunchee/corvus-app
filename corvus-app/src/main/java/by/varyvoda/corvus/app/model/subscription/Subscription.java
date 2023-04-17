@@ -27,6 +27,6 @@ public class Subscription {
     private SubscriptionLevel level;
 
     @ManyToOne
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "\"user\"")
     private User user;
 }

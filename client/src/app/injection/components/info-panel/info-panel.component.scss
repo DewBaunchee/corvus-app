@@ -1,0 +1,38 @@
+@import "src/styles";
+
+:host {
+    .info-panel {
+        @extend .panel;
+
+        display: flex;
+        flex-direction: column;
+
+        //.logo-container {
+        //    display: flex;
+        //    align-items: center;
+        //    justify-content: center;
+        //    text-align: center;
+        //    min-height: 100px;
+        //    flex-grow: 2;
+        //
+        //    .logo {
+        //        width: 50%;
+        //        border-radius: 50%;
+        //    }
+        //}
+
+        .user-info {
+            padding: 10px;
+            flex-grow: 4;
+        }
+
+        hr {
+            margin: 10px 20px;
+        }
+
+        .about-app {
+            padding: 10px;
+            flex-grow: 1;
+        }
+    }
+}

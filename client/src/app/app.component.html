@@ -1,1 +1,11 @@
-<generation-page></generation-page>
+<div class="app-container" *ngIf="ws.connected() | async">
+    <app-header></app-header>
+    <queue-page></queue-page>
+</div>
+<div class="loader" *ngIf="(ws.connected() | async) === false">
+    <img class="loader-icon" src="assets/logo/logo-icon.svg" alt="Logo Loader">
+    <span class="loader-text">
+    </span>
+</div>
+
+<input type="file" hidden #fileInput>

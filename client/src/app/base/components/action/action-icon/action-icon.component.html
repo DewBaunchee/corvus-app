@@ -1,0 +1,9 @@
+<span class="icon-container"
+      [hidden]="(action.displayed() | async) === false"
+      [class.disabled]="action.disabled() | async"
+      (click)="doAction()"
+>
+    <span [ngClass]="action.faIcon"
+          [title]="action.name"
+    ></span>
+</span>

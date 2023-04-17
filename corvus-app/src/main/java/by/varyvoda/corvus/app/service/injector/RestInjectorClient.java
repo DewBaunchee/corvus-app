@@ -14,7 +14,7 @@ public class RestInjectorClient implements InjectorClient {
     private final RestTemplate rest;
 
     @Value("${injector.host}")
-    private final String apiHost;
+    private String apiHost;
 
     @Override
     public InjectorResponse inject(InjectionRequest request) {

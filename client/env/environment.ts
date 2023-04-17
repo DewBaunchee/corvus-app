@@ -1,5 +1,5 @@
 const environment = {
-    baseUrl: "corvus"
+    baseUrl: "http://localhost:8080/corvus"
 };
 
 export default environment;

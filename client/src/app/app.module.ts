@@ -1,23 +1,28 @@
-import { NgModule } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
+import {NgModule} from "@angular/core";
 
-import { AppComponent } from "./app.component";
-import { GenerationPageComponent } from "./components/pages/main-page/generation-page.component";
-import { FileUploadDirective } from "./components/directive/file-upload.directive";
-import {FormsModule} from "@angular/forms";
+import {AppComponent} from "./app.component";
+import {BaseModule} from "./base/base.module";
+import {InjectionModule} from "./injection/injection.module";
+import {StoreModule} from "@ngrx/store";
+import {StoreDevtoolsModule} from "@ngrx/store-devtools";
+import {EffectsModule} from "@ngrx/effects";
+import {AsyncPipe, NgIf} from "@angular/common";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    GenerationPageComponent,
-    FileUploadDirective
-  ],
-    imports: [
-        BrowserModule,
-        FormsModule
+    declarations: [
+        AppComponent,
     ],
-  providers: [],
-  bootstrap: [AppComponent]
+    imports: [
+        BaseModule,
+        InjectionModule,
+        StoreModule.forRoot(),
+        EffectsModule.forRoot(),
+        StoreDevtoolsModule.instrument(),
+        NgIf,
+        AsyncPipe
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 

@@ -1,0 +1,26 @@
+@import 'src/styles.scss';
+
+:host {
+
+    .container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+
+        overflow: hidden;
+
+        gap: 40px;
+
+        info-panel {
+            display: inline-flex;
+        }
+
+        queue {
+            display: inline-flex;
+            align-self: stretch;
+            flex-grow: 1;
+        }
+    }
+}

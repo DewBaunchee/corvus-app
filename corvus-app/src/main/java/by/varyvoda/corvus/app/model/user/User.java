@@ -28,8 +28,8 @@ public class User implements UserDetails {
     private String email;
 
     @OneToOne
-    @Column(name = "active_subscription")
-    private Subscription active_subscription;
+    @JoinColumn(name = "active_subscription")
+    private Subscription activeSubscription;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
