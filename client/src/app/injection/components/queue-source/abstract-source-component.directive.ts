@@ -1,13 +1,19 @@
-import {Directive, Input} from "@angular/core";
-import {Source} from "../../models/source/source";
+import {Directive, ElementRef, Input} from "@angular/core";
+import {Source, SourceType} from "../../../base/models/source/source";
 
 @Directive()
-export abstract class AbstractSourceComponent<TSource extends Source> {
+export abstract class AbstractSourceComponent<ST extends SourceType = SourceType, S extends Source = Source<ST>> {
+
+    public abstract sourceType: ST;
+
+    public abstract elementRef: ElementRef;
+
+    @Input() public editable = true;
 
     @Input()
     public set source(value: Source) {
-        this.castedSource = value as TSource;
+        this.castedSource = value as S;
     }
 
-    public castedSource?: TSource = undefined;
+    public castedSource?: S = undefined;
 }

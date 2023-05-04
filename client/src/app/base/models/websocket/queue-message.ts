@@ -6,5 +6,6 @@ export interface QueueMessage {
     readonly status?: InjectionStatus;
     readonly injections?: InjectionModel[]
     readonly addedInjections?: InjectionModel[]
+    readonly removedInjections?: InjectionModel[]
     readonly updatedInjections?: InjectionModel[]
 }

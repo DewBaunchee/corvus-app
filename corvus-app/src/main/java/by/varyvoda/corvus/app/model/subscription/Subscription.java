@@ -19,9 +19,6 @@ public class Subscription {
     @Column(name = "active_until")
     private LocalDateTime activeUntil;
 
-    @Column(name = "api_key")
-    private String apiKey;
-
     @ManyToOne
     @JoinColumn(name = "level")
     private SubscriptionLevel level;

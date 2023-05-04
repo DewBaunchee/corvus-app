@@ -9,10 +9,8 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-//@Table(name = "source")
-//@MappedSuperclass
-//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-//@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Source {
 
     @Id
@@ -24,7 +22,22 @@ public abstract class Source {
     @Enumerated(EnumType.STRING)
     private Type type;
 
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "extension")
+    private String extension;
+
+    public void guessExtension() {
+        int dotIndex = name.lastIndexOf(".");
+        if (dotIndex == -1) {
+            this.extension = "";
+            return;
+        }
+        this.extension = name.substring(dotIndex + 1);
+    }
+
     public enum Type {
-        FILE
+        FILE, URL, VALUE, BASE64
     }
 }

@@ -18,6 +18,6 @@ public class QueueMessage {
     private InjectionStatus status;
     private List<InjectionDto> injections;
     private List<InjectionDto> addedInjections;
-
+    private List<InjectionDto> removedInjections;
     private List<InjectionDto> updatedInjections;
 }

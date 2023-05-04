@@ -24,6 +24,7 @@ public class QueueChangeToMessageConverter implements Converter<InjectionQueue.C
             .status(source.getStatus())
             .injections(convertInjections(source.getInjections()))
             .addedInjections(convertInjections(source.getAddedInjections()))
+            .removedInjections(convertInjections(source.getRemovedInjections()))
             .updatedInjections(convertInjections(source.getUpdatedInjections()))
             .build();
     }

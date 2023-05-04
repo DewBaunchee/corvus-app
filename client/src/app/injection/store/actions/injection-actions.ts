@@ -4,7 +4,7 @@ import {InjectionId, InjectionModel} from "../../models/injection/injection-mode
 import {registerActions} from "../../../store/actions/app-actions";
 import {InjectionQueueModel} from "../../models/injection/injection-queue-model";
 import {InjectionStatus} from "../../models/injection/injection-status";
-import {Source} from "../../models/source/source";
+import {Source} from "../../../base/models/source/source";
 
 export const InjectionQueueActions = createActionGroup({
     source: "Injection Queue",
@@ -14,6 +14,7 @@ export const InjectionQueueActions = createActionGroup({
         "Set Status": props<{ queueId: number, status: InjectionStatus }>(),
         "Set Injections": props<{ queueId: number, injections: InjectionModel[] }>(),
         "Add Injections": props<{ queueId: number, injections: InjectionModel[] }>(),
+        "Remove Injections": props<{ queueId: number, injections: InjectionModel[] }>(),
         "Update Injections": props<{ queueId: number, injections: InjectionModel[] }>(),
         "Update": props<{ queue: InjectionQueueModel }>(),
         "Clear": props<EmptyProps>(),
@@ -27,6 +28,7 @@ export const InjectionActions = createActionGroup({
     events: {
         "Inject": props<{ injectionId: InjectionId }>(),
         "Download Result": props<{ injectionId: InjectionId }>(),
+        "Remove": props<{ injectionId: InjectionId }>(),
         "Move": props<{ injectionId: InjectionId, newOrderId: number }>(),
         "Upload Data Source": props<{ injectionId: InjectionId, file: File }>(),
         "Upload Template Source": props<{ injectionId: InjectionId, file: File }>(),

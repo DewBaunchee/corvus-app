@@ -29,33 +29,33 @@
             </div>
             <div class="queue-element-body">
                 <injection-status class="status" [status]="injection.model.status"></injection-status>
-
-                <div class="data" *ngIf="!injection.model.dataSource"
-
-                     title="Drop your data file here or select it by click"
-
-                     fileUpload
-                     allowedExtensions="json"
-                     (file)="uploadData(injection.model.id, $event)"
-                >
-                    Data
-                </div>
-                <typed-source class="data" [source]="injection.model.dataSource" *ngIf="injection.model.dataSource">
-                </typed-source>
-
-                <div class="template" *ngIf="!injection.model.templateSource"
-
-                     title="Drop your template file here or select it by click"
-
-                     fileUpload
-                     allowedExtensions="docx"
-                     (file)="uploadTemplate(injection.model.id, $event)"
-                >
-                    Template
-                </div>
-                <typed-source class="template" [source]="injection.model.templateSource" *ngIf="injection.model.templateSource">
-                </typed-source>
-
+                <source-selector class="source-selector"
+                                 [editable]="injection.model.status !== 'SUCCESS'"
+                                 [source]="injection.model.dataSource">
+                    <file-source
+                        defaultName="Data"
+                        title="Drop your data file here or select it by click"
+                        allowedExtensions="json"
+                        (uploadFile)="uploadData(injection.model.id, $event)"
+                        (notEditableClick)="downloadSource(injection.model.dataSource.id)"
+                    ></file-source>
+                    <url-source></url-source>
+                    <value-source></value-source>
+                    <base64-source></base64-source>
+                </source-selector>
+                <source-selector class="source-selector"
+                                 [editable]="injection.model.status !== 'SUCCESS'"
+                                 [source]="injection.model.templateSource">
+                    <file-source
+                        defaultName="Template"
+                        title="Drop your template file here or select it by click"
+                        allowedExtensions="docx"
+                        (uploadFile)="uploadTemplate(injection.model.id, $event)"
+                        (notEditableClick)="downloadSource(injection.model.dataSource.id)"
+                    ></file-source>
+                    <url-source></url-source>
+                    <base64-source></base64-source>
+                </source-selector>
                 <action-series [actions]="injection.actions.list"></action-series>
             </div>
         </div>

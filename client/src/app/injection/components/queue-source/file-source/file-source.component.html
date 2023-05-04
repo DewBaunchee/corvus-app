@@ -1,8 +1,17 @@
-<ng-container *ngIf="castedSource">
+<div class="drop-zone"
+     [class.editable]="editable"
+     [title]="title"
+
+     (click)="dropZoneClicked()"
+     [enabled]="editable"
+     fileUpload
+     [allowedExtensions]="allowedExtensions"
+     (file)="uploadFile.emit($event)"
+>
     <span>
-        {{castedSource.name}}
+        {{castedSource ? castedSource.name : defaultName}}
     </span>
-    <span *ngIf="castedSource.loadingProgress !== undefined && castedSource.loadingProgress !== 1">
+    <span *ngIf="castedSource && castedSource.loadingProgress !== undefined && castedSource.loadingProgress !== 1">
         {{castedSource.loadingProgress * 100}}%
     </span>
-</ng-container>
+</div>

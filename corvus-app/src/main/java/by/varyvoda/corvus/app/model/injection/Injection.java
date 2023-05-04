@@ -1,6 +1,6 @@
 package by.varyvoda.corvus.app.model.injection;
 
-import by.varyvoda.corvus.app.model.source.FileSource;
+import by.varyvoda.corvus.app.model.source.Source;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,7 +23,7 @@ public class Injection {
     @ToString.Exclude
     private InjectionQueue queue;
 
-    @Column(name = "orderId")
+    @Column(name = "order_id")
     private Integer orderId;
 
     @Column(name = "status")
@@ -32,17 +32,17 @@ public class Injection {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "data_source")
-    private FileSource dataSource;
+    private Source dataSource;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "template_source")
-    private FileSource templateSource;
+    private Source templateSource;
 
     @Column(name = "preferred_result_name")
     private String preferredResultName = "Document.docx";
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "result_source")
-    private FileSource resultSource;
+    private Source resultSource;
 
 }

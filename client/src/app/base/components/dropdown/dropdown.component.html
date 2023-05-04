@@ -1,0 +1,10 @@
+<div class="dropdown-header" [class.open]="isOpen"
+     (outsideClick)="close()"
+     (click)="toggle()"
+>
+    <span class="icon" *ngIf="titleFaIcon" [class]="titleFaIcon"></span>
+    <span class="text" *ngIf="titleText">{{titleText}}</span>
+</div>
+<div class="dropdown-body" [class.open]="isOpen">
+    <ng-content></ng-content>
+</div>

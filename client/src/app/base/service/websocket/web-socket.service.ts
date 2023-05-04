@@ -51,6 +51,12 @@ export class WebSocketService {
                 injections: message.addedInjections
             }));
         }
+        if (message.removedInjections) {
+            this.store.dispatch(InjectionQueueActions.removeInjections({
+                queueId: message.queueId,
+                injections: message.removedInjections
+            }));
+        }
         if (message.updatedInjections) {
             this.store.dispatch(InjectionQueueActions.updateInjections({
                 queueId: message.queueId,

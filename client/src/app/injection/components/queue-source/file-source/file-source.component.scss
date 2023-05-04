@@ -1,0 +1,7 @@
+:host {
+    .drop-zone {
+        &:not(.editable) {
+            border-style: solid;
+        }
+    }
+}

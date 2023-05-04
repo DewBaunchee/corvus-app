@@ -13,8 +13,11 @@ import {StoreModule} from "@ngrx/store";
 import {injectionReducer} from "./store/reducer/injection-reducer";
 import {EffectsModule} from "@ngrx/effects";
 import {InjectionEffects} from "./store/effects/injection-effects";
-import { FileSourceComponent } from "./components/queue-source/file-source/file-source.component";
-import { TypedSourceComponent } from "./components/queue-source/typed-source/typed-source.component";
+import {FileSourceComponent} from "./components/queue-source/file-source/file-source.component";
+import {SourceSelectorComponent} from "./components/queue-source/source-selector/source-selector.component";
+import { UrlSourceComponent } from './components/queue-source/url-source/url-source.component';
+import { ValueSourceComponent } from './components/queue-source/value-source/value-source.component';
+import { Base64SourceComponent } from './components/queue-source/base64-source/base64-source.component';
 
 
 @NgModule({
@@ -24,7 +27,10 @@ import { TypedSourceComponent } from "./components/queue-source/typed-source/typ
         QueueComponent,
         InjectionStatusComponent,
         FileSourceComponent,
-        TypedSourceComponent,
+        SourceSelectorComponent,
+        UrlSourceComponent,
+        ValueSourceComponent,
+        Base64SourceComponent,
     ],
     imports: [
         BaseModule,

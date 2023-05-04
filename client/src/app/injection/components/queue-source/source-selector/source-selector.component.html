@@ -1,0 +1,17 @@
+<dropdown *ngIf="editable$ | async"
+          class="selector"
+          [titleFaIcon]="(selectedOption | async)?.faIcon || ''"
+>
+    <div class="option-container"
+         *ngFor="let option of options | async"
+         (click)="selectedOption.next(option)"
+    >
+        <span class="option"
+              [ngClass]="option.faIcon"
+              [title]="option.name"
+        >{{option.text}}</span>
+    </div>
+</dropdown>
+<div #sourceContainer class="source-container">
+    <ng-content></ng-content>
+</div>

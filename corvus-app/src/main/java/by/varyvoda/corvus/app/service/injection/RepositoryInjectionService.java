@@ -7,13 +7,13 @@ import by.varyvoda.corvus.app.model.injection.Injection;
 import by.varyvoda.corvus.app.model.injection.InjectionQueue;
 import by.varyvoda.corvus.app.model.injection.InjectionStatus;
 import by.varyvoda.corvus.app.model.source.FileSource;
+import by.varyvoda.corvus.app.model.source.Source;
 import by.varyvoda.corvus.app.repository.InjectionQueueRepository;
 import by.varyvoda.corvus.app.repository.InjectionRepository;
 import by.varyvoda.corvus.app.service.injector.InjectorClient;
 import by.varyvoda.corvus.app.service.source.SourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -92,9 +92,9 @@ public class RepositoryInjectionService implements InjectionService {
     }
 
     @Override
-    public InjectionQueue.Change uploadData(Integer injectionId, MultipartFile file) {
+    public InjectionQueue.Change setDataSource(Integer injectionId, Source source) {
         var injection = injectionRepository.getById(injectionId);
-        injection.setDataSource(sourceService.createFileSource(file));
+        injection.setDataSource(source);
         updateStatus(injection);
         updateStatus(injection.getQueue());
         injectionRepository.save(injection);
@@ -105,9 +105,9 @@ public class RepositoryInjectionService implements InjectionService {
     }
 
     @Override
-    public InjectionQueue.Change uploadTemplate(Integer injectionId, MultipartFile file) {
+    public InjectionQueue.Change setTemplateSource(Integer injectionId, Source source) {
         var injection = injectionRepository.getById(injectionId);
-        injection.setTemplateSource(sourceService.createFileSource(file));
+        injection.setTemplateSource(source);
         updateStatus(injection);
         updateStatus(injection.getQueue());
         injectionRepository.save(injection);
@@ -135,13 +135,13 @@ public class RepositoryInjectionService implements InjectionService {
                 .build()
         );
 
-        injection.setResultSource(
-            FileSource.builder()
-                .name(injection.getPreferredResultName())
-                .data(response.getDocument())
-                .build()
-        );
-        injection.setStatus(InjectionStatus.DONE);
+        FileSource resultSource = new FileSource();
+        resultSource.setName(injection.getPreferredResultName());
+        resultSource.guessExtension();
+        resultSource.setContent(response.getDocument());
+        injection.setResultSource(resultSource);
+
+        injection.setStatus(InjectionStatus.SUCCESS);
         updateStatus(injection.getQueue());
 
         injectionRepository.save(injection);
@@ -152,7 +152,20 @@ public class RepositoryInjectionService implements InjectionService {
     }
 
     @Override
-    public FileSource getResultSource(Integer injectionId) {
+    public InjectionQueue.Change remove(Integer injectionId) {
+        Injection injection = injectionRepository.getByIdOrNull(injectionId);
+        if (injection == null) throw new NullPointerException("Injection with id " + injectionId + " is not found.");
+
+        InjectionQueue queue = injection.getQueue();
+        injectionRepository.delete(injection);
+
+        return InjectionQueue.Change.startBuilding(queue)
+            .removedInjections(List.of(injection))
+            .build();
+    }
+
+    @Override
+    public Source getResultSource(Integer injectionId) {
         Injection injection = injectionRepository.getById(injectionId);
         return injection.getResultSource();
     }
@@ -174,13 +187,16 @@ public class RepositoryInjectionService implements InjectionService {
         if (statusCountMap.isEmpty())
             return InjectionStatus.EMPTY;
 
+        if (statusCountMap.containsKey(InjectionStatus.ERROR))
+            return InjectionStatus.ERROR;
+
         if (statusCountMap.containsKey(InjectionStatus.READY))
             return InjectionStatus.READY;
 
         if (statusCountMap.containsKey(InjectionStatus.EMPTY))
             return InjectionStatus.EMPTY;
 
-        return InjectionStatus.DONE;
+        return InjectionStatus.SUCCESS;
     }
 
     private void updateStatus(Injection injection) {
@@ -194,7 +210,7 @@ public class RepositoryInjectionService implements InjectionService {
 
     private InjectionStatus calculateStatus(Injection injection) {
         if (injection.getResultSource() != null)
-            return InjectionStatus.DONE;
+            return InjectionStatus.SUCCESS;
         if (injection.getDataSource() != null && injection.getTemplateSource() != null)
             return InjectionStatus.READY;
         return InjectionStatus.EMPTY;

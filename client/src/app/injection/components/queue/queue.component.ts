@@ -5,6 +5,7 @@ import {AppState} from "../../../store/state/app-state";
 import {Store} from "@ngrx/store";
 import {FileDecorator} from "../../../base/models/file/file-decorator";
 import {InjectionId} from "../../models/injection/injection-model";
+import {SourceActions} from "../../../base/store/actions/source-actions";
 
 @Component({
     selector: "queue",
@@ -45,5 +46,9 @@ export class QueueComponent {
         if (!injection) return;
 
         this.store.dispatch(InjectionActions.uploadTemplateSource({injectionId, file: file.toFile()}));
+    }
+
+    public downloadSource(id: number) {
+        this.store.dispatch(SourceActions.download({id}));
     }
 }

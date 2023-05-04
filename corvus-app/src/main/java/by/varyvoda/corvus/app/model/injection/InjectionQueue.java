@@ -43,6 +43,7 @@ public class InjectionQueue {
         private InjectionStatus status;
         private List<Injection> injections;
         private List<Injection> addedInjections;
+        private List<Injection> removedInjections;
         private List<Injection> updatedInjections;
 
         public static Change.ChangeBuilder startBuilding(InjectionQueue queue) {

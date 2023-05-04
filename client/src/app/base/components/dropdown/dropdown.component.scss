@@ -1,0 +1,48 @@
+@import "src/styles";
+
+:host {
+    user-select: none;
+
+    .dropdown-header {
+
+        -webkit-box-shadow: 0 5px 10px 2px rgba(34, 60, 80, 0.1);
+        -moz-box-shadow: 0 5px 10px 2px rgba(34, 60, 80, 0.1);
+        box-shadow: 0 5px 10px 2px rgba(34, 60, 80, 0.1);
+
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        padding: 7px;
+        border-radius: 5px;
+
+        font-size: 1.2em;
+
+        cursor: pointer;
+
+        &.open {
+
+        }
+
+        &:hover {
+            background: rgba($prim-color, 0.15);
+        }
+    }
+
+    .dropdown-body {
+        @extend .panel;
+
+        -webkit-box-shadow: 0 0 12px 1px rgba(34, 60, 80, 0.2);
+        -moz-box-shadow: 0 0 12px 1px rgba(34, 60, 80, 0.2);
+        box-shadow: 0 0 12px 1px rgba(34, 60, 80, 0.2);
+
+        margin-top: 7px;
+
+        display: none;
+        position: absolute;
+        padding: 5px;
+
+        &.open {
+            display: inline;
+        }
+    }
+}

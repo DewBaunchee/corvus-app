@@ -6,6 +6,10 @@ import {NoAction} from "../../../store/actions/app-actions";
 
 export type ActionDisplayType = "separator" | "label" | "icon" | "none";
 
+export interface ActionStyleOptions {
+    color?: string;
+}
+
 export class AppAction<Props = any> extends OnDestroy {
 
     private readonly _disabled = new BehaviorSubject(false);
@@ -15,9 +19,11 @@ export class AppAction<Props = any> extends OnDestroy {
     private constructor(
         public readonly name: string,
         public readonly faIcon: string,
+        public readonly assetIcon: string,
         public readonly displayType: ActionDisplayType,
         private readonly actionCreator: AppActionCreator<Props>,
-        private readonly props?: Props
+        private readonly props?: Props,
+        public readonly style?: ActionStyleOptions
     ) {
         super();
         this.completeOnDestroy(() => [this._disabled, this._displayed]);
@@ -28,19 +34,34 @@ export class AppAction<Props = any> extends OnDestroy {
     }
 
     public static createBlank() {
-        return new AppAction("", "", "none", NoAction, {});
+        return new AppAction("", "", "", "none", NoAction, {});
     }
 
-    public static createIcon<TProps>(name: string, faIcon: string, actionCreator: AppActionCreator<TProps>, props?: TProps) {
-        return new AppAction(name, faIcon, "icon", actionCreator, props);
+    public static createFaIcon<TProps>(name: string,
+                                       faIcon: string,
+                                       actionCreator: AppActionCreator<TProps>,
+                                       props?: TProps,
+                                       style?: ActionStyleOptions) {
+        return new AppAction(name, faIcon, "", "icon", actionCreator, props, style);
     }
 
-    public static createLabel<TProps>(name: string, actionCreator: AppActionCreator<TProps>, props?: TProps) {
-        return new AppAction(name, "", "label", actionCreator, props);
+    public static createAssetIcon<TProps>(name: string,
+                                          assetIcon: string,
+                                          actionCreator: AppActionCreator<TProps>,
+                                          props?: TProps,
+                                          style?: ActionStyleOptions) {
+        return new AppAction(name, "", assetIcon, "icon", actionCreator, props, style);
+    }
+
+    public static createLabel<TProps>(name: string,
+                                      actionCreator: AppActionCreator<TProps>,
+                                      props?: TProps,
+                                      style?: ActionStyleOptions) {
+        return new AppAction(name, "", "", "label", actionCreator, props, style);
     }
 
     public static createSeparator() {
-        return new AppAction("", "", "separator", NoAction, {});
+        return new AppAction("", "", "", "separator", NoAction, {});
     }
 
     public dispatchTo(store: Store, props?: Props) {

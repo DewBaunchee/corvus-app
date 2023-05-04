@@ -22,6 +22,9 @@ export class FileUploadDirective {
     @Input()
     public browseOnClick = true;
 
+    @Input()
+    public enabled= true;
+
     constructor(
         private readonly elementRef: ElementRef,
         private readonly globalInput: GlobalFileInputService
@@ -34,7 +37,7 @@ export class FileUploadDirective {
         event.preventDefault();
         event.stopPropagation();
 
-        if (!this.browseOnClick) return;
+        if (!this.browseOnClick || !this.enabled) return;
 
         this.globalInput.trigger(
             (files?: FileList) => this.handleFileList(files),
@@ -49,6 +52,9 @@ export class FileUploadDirective {
     private dragOver(event: DragEvent) {
         event.preventDefault();
         event.stopPropagation();
+
+        if(!this.enabled) return;
+
         this.elementRef.nativeElement.classList.add("drag-over");
     }
 
@@ -56,6 +62,9 @@ export class FileUploadDirective {
     private dragLeave(event: DragEvent) {
         event.preventDefault();
         event.stopPropagation();
+
+        if(!this.enabled) return;
+
         this.elementRef.nativeElement.classList.remove("drag-over");
     }
 
@@ -63,6 +72,9 @@ export class FileUploadDirective {
     private drop(event: DragEvent) {
         event.preventDefault();
         event.stopPropagation();
+
+        if(!this.enabled) return;
+
         this.elementRef.nativeElement.classList.remove("drag-over");
 
         this.handleFileList(event.dataTransfer?.files);

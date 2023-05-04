@@ -91,4 +91,15 @@ export class InjectionHttpService {
         window.open(encodeURI(`${this.root}/download/result?injectionId=${injectionId}`));
         return of(undefined);
     }
+
+    public remove(injectionId: InjectionId) {
+        return this.http.post(
+            `${this.root}/remove`,
+            {},
+            {
+                params: new HttpParams()
+                    .set("injectionId", injectionId)
+            }
+        );
+    }
 }

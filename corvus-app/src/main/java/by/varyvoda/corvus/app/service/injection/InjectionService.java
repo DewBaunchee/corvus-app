@@ -1,8 +1,7 @@
 package by.varyvoda.corvus.app.service.injection;
 
 import by.varyvoda.corvus.app.model.injection.InjectionQueue;
-import by.varyvoda.corvus.app.model.source.FileSource;
-import org.springframework.web.multipart.MultipartFile;
+import by.varyvoda.corvus.app.model.source.Source;
 
 public interface InjectionService {
 
@@ -18,11 +17,14 @@ public interface InjectionService {
 
     InjectionQueue.Change createInjection(Integer queueId, int count);
 
-    InjectionQueue.Change uploadData(Integer injectionId, MultipartFile file);
+    InjectionQueue.Change setDataSource(Integer injectionId, Source source);
 
-    InjectionQueue.Change uploadTemplate(Integer injectionId, MultipartFile file);
+    InjectionQueue.Change setTemplateSource(Integer injectionId, Source source);
 
     InjectionQueue.Change inject(Integer injectionId);
 
-    FileSource getResultSource(Integer injectionId);
+    InjectionQueue.Change remove(Integer injectionId);
+
+    Source getResultSource(Integer injectionId);
+
 }

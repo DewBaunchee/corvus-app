@@ -5,7 +5,7 @@ import {exhaustMap, filter, map, mergeMap, pipe} from "rxjs";
 import {InjectionService} from "../../service/injection/injection.service";
 import {NoAction} from "../../../store/actions/app-actions";
 import {HttpEvent, HttpEventType, HttpProgressEvent} from "@angular/common/http";
-import {createFileSource} from "../../models/source/file-source";
+import {createFileSource} from "../../../base/models/source/file-source";
 
 @Injectable()
 export class InjectionEffects {
@@ -85,6 +85,14 @@ export class InjectionEffects {
         ofType(InjectionActions.downloadResult),
         exhaustMap(({injectionId}) =>
             this.injectionService.downloadResult(injectionId)
+        ),
+        map(NoAction)
+    ));
+
+    public readonly remove = createEffect(() => this.actions$.pipe(
+        ofType(InjectionActions.remove),
+        exhaustMap(({injectionId}) =>
+            this.injectionService.remove(injectionId)
         ),
         map(NoAction)
     ));

@@ -1,6 +1,6 @@
 import {InjectionStatus} from "./injection-status";
 import {AppActions} from "../../../base/models/action/app-actions";
-import {Source} from "../source/source";
+import {Source} from "../../../base/models/source/source";
 
 
 export type InjectionId = number;

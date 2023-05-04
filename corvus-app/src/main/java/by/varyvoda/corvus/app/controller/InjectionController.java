@@ -1,15 +1,14 @@
 package by.varyvoda.corvus.app.controller;
 
 import by.varyvoda.corvus.app.model.injection.InjectionQueue;
-import by.varyvoda.corvus.app.model.source.FileSource;
+import by.varyvoda.corvus.app.model.source.Source;
 import by.varyvoda.corvus.app.model.websocket.QueueMessage;
 import by.varyvoda.corvus.app.service.injection.InjectionService;
+import by.varyvoda.corvus.app.service.source.SourceService;
 import by.varyvoda.corvus.app.service.websocket.WebSocketSendService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.web.server.MimeMappings;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,9 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class InjectionController {
 
     private final InjectionService queueService;
-
+    private final SourceService sourceService;
     private final ConversionService conversionService;
-
     private final WebSocketSendService ws;
 
     @PostMapping("queue/create")
@@ -51,14 +49,16 @@ public class InjectionController {
     }
 
     @PostMapping("upload/data")
-    public void uploadData(@RequestParam Integer injectionId, @RequestParam MultipartFile file) {
-        var change = queueService.uploadData(injectionId, file);
+    public void uploadDataFile(@RequestParam Integer injectionId, @RequestParam MultipartFile file) {
+        var source = sourceService.createFileSource(file);
+        var change = queueService.setDataSource(injectionId, source);
         send(change);
     }
 
     @PostMapping("upload/template")
-    public void uploadFile(@RequestParam Integer injectionId, @RequestParam MultipartFile file) {
-        var change = queueService.uploadTemplate(injectionId, file);
+    public void uploadTemplateFile(@RequestParam Integer injectionId, @RequestParam MultipartFile file) {
+        var source = sourceService.createFileSource(file);
+        var change = queueService.setTemplateSource(injectionId, source);
         send(change);
     }
 
@@ -68,15 +68,17 @@ public class InjectionController {
         send(change);
     }
 
+    @PostMapping("remove")
+    public void remove(@RequestParam Integer injectionId) {
+        var change = queueService.remove(injectionId);
+        send(change);
+    }
+
     @GetMapping("download/result")
     @ResponseBody
-    public ResponseEntity<byte[]> downloadFile(@RequestParam Integer injectionId) {
-        FileSource file = queueService.getResultSource(injectionId);
-
-        return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_TYPE, MimeMappings.DEFAULT.get(file.getExtension()))
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
-            .body(file.getData());
+    public ResponseEntity<byte[]> downloadResult(@RequestParam Integer injectionId) {
+        Source resultSource = queueService.getResultSource(injectionId);
+        return sourceService.download(resultSource);
     }
 
     private void send(InjectionQueue.Change change) {

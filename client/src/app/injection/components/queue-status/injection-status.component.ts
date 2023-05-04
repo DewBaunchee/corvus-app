@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import {Component, HostBinding, Input} from "@angular/core";
 import {InjectionStatus} from "../../models/injection/injection-status";
 
 @Component({
@@ -11,15 +11,18 @@ export class InjectionStatusComponent {
     private readonly faStyles: {
         [key in InjectionStatus]: string;
     } = {
-        [InjectionStatus.EMPTY]: "fa fa-question-circle",
-        [InjectionStatus.READY]: "fa fa-arrow-circle-right",
-        [InjectionStatus.DONE]: "fa fa-circle-check",
+        [InjectionStatus.EMPTY]: "assets/status/empty.svg#main",
+        [InjectionStatus.READY]: "assets/status/ready.svg#main",
+        [InjectionStatus.ERROR]: "assets/status/error.svg#main",
+        [InjectionStatus.SUCCESS]: "assets/status/success.svg#main",
     };
 
     @Input()
     public set status(value: InjectionStatus) {
-        this.faStyle = this.faStyles[value];
+        this.asset = this.faStyles[value];
+        this.title = value;
     }
 
-    public faStyle = "";
+    public asset = "";
+    @HostBinding("title") public title = "";
 }

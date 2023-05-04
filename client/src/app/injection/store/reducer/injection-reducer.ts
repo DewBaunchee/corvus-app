@@ -22,6 +22,16 @@ export const injectionReducer = createReducer(
             ]
         }
     })),
+    on(InjectionQueueActions.removeInjections, (state, {injections}) => {
+        const removedIds = injections.map(injection => injection.id);
+        return {
+            ...state,
+            queue: {
+                ...state.queue,
+                injections: state.queue.injections.filter(injection => !removedIds.includes(injection.id)),
+            }
+        };
+    }),
     on(InjectionQueueActions.setInjections, (state, {injections}) => ({
         ...state,
         queue: {

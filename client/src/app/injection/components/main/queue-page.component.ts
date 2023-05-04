@@ -9,6 +9,8 @@ import {Store} from "@ngrx/store";
 import {InjectionStatus} from "../../models/injection/injection-status";
 import {Injection} from "../../models/injection/injection-model";
 import {AppActions} from "../../../base/models/action/app-actions";
+import {WARNING_COLOR} from "../../../base/util/theme";
+import {SourceActions} from "../../../base/store/actions/source-actions";
 
 @Component({
     selector: "queue-page",
@@ -19,20 +21,20 @@ import {AppActions} from "../../../base/models/action/app-actions";
 export class QueuePageComponent implements OnInit {
 
     public readonly queueActions = new AppActions([
-        AppAction.createIcon(
+        AppAction.createFaIcon(
             "Inject All",
             "fa fa-play",
             InjectionQueueActions.injectAll,
             {}
         ),
         AppAction.createSeparator(),
-        AppAction.createIcon(
+        AppAction.createFaIcon(
             "Create Injection",
             "fa fa-plus",
             InjectionQueueActions.createInjections,
             {count: 1}
         ),
-        AppAction.createIcon(
+        AppAction.createFaIcon(
             "Clear Queue",
             "fa fa-solid fa-trash",
             InjectionQueueActions.clear,
@@ -62,18 +64,29 @@ export class QueuePageComponent implements OnInit {
                     injection => {
                         const actions: AppAction[] = [];
 
-                        if (injection.status === InjectionStatus.DONE) {
+                        if (injection.templateSource?.id > 0) {
                             actions.push(
-                                AppAction.createIcon(
+                                AppAction.createFaIcon(
+                                    "Validate Template",
+                                    "fa fa-search",
+                                    SourceActions.validateTemplate,
+                                    {sourceId: injection.templateSource.id}
+                                )
+                            );
+                        }
+
+                        if (injection.status === InjectionStatus.SUCCESS) {
+                            actions.push(
+                                AppAction.createFaIcon(
                                     "Download Result",
                                     "fa fa-download",
                                     InjectionActions.downloadResult,
                                     {injectionId: injection.id}
                                 ),
                             );
-                        } else if(injection.status === InjectionStatus.READY) {
+                        } else if (injection.status === InjectionStatus.READY) {
                             actions.push(
-                                AppAction.createIcon(
+                                AppAction.createFaIcon(
                                     "Inject",
                                     "fa fa-play",
                                     InjectionActions.inject,
@@ -81,6 +94,16 @@ export class QueuePageComponent implements OnInit {
                                 ),
                             );
                         }
+
+                        actions.push(
+                            AppAction.createFaIcon(
+                                "Remove",
+                                "fa fa-solid fa-trash",
+                                InjectionActions.remove,
+                                {injectionId: injection.id},
+                                {color: WARNING_COLOR}
+                            )
+                        );
 
                         return new Injection(injection, new AppActions(actions));
                     }

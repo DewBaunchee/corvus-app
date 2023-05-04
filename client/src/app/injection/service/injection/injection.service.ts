@@ -43,4 +43,8 @@ export class InjectionService {
     public downloadResult(injectionId: InjectionId) {
         return this.http.downloadResult(injectionId);
     }
+
+    public remove(injectionId: InjectionId) {
+        return this.http.remove(injectionId);
+    }
 }

@@ -33,21 +33,7 @@
             }
 
             action-series {
-                @extend .panel;
-
-                display: flex;
-
-                align-items: center;
-
                 flex-grow: 1;
-                gap: 10px;
-
-                padding: 5px;
-
-                app-action {
-                    height: 25px;
-                    width: 25px;
-                }
             }
         }
 
@@ -124,16 +110,9 @@
                         height: 30px;
                     }
 
-                    .data {
-                        @extend .drop-zone;
-
+                    .source-selector {
                         flex-grow: 1;
-                    }
-
-                    .template {
-                        @extend .drop-zone;
-
-                        flex-grow: 1;
+                        margin: 5px 0;
                     }
 
                     .action {

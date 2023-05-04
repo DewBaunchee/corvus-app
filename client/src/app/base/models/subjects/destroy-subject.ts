@@ -24,4 +24,11 @@ export class DestroySubject extends Subject<void> {
     public takeUntil<T>(): MonoTypeOperatorFunction<T> {
         return takeUntil(this);
     }
+
+    public completeOnEmit(subjects: () => Subject<any>[]) {
+        this.subscribe(() => {
+            subjects()?.forEach(subject => subject.complete());
+        });
+        return this;
+    }
 }

@@ -5,7 +5,6 @@ import {isPresent} from "../../util/functions";
 @Injectable()
 export class NotificationService {
 
-
     public showError(message: string, title?: string) {
         this.show({
             priority: NotificationPriority.ERROR,
