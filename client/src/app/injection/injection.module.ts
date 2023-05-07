@@ -15,9 +15,9 @@ import {EffectsModule} from "@ngrx/effects";
 import {InjectionEffects} from "./store/effects/injection-effects";
 import {FileSourceComponent} from "./components/queue-source/file-source/file-source.component";
 import {SourceSelectorComponent} from "./components/queue-source/source-selector/source-selector.component";
-import { UrlSourceComponent } from './components/queue-source/url-source/url-source.component';
-import { ValueSourceComponent } from './components/queue-source/value-source/value-source.component';
-import { Base64SourceComponent } from './components/queue-source/base64-source/base64-source.component';
+import {UrlSourceComponent} from "./components/queue-source/url-source/url-source.component";
+import {ValueSourceComponent} from "./components/queue-source/value-source/value-source.component";
+import {Base64SourceComponent} from "./components/queue-source/base64-source/base64-source.component";
 
 
 @NgModule({

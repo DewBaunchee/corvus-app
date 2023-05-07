@@ -29,7 +29,7 @@ export class QueueComponent {
     }
 
     public createInjection() {
-        this.queue.actions.dispatch(this.store, InjectionQueueActions.createInjections);
+        this.queue.actions.activate(InjectionQueueActions.createInjections.type);
     }
 
     public uploadData(injectionId: InjectionId, file: FileDecorator) {

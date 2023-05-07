@@ -6,7 +6,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "\"user\"")
@@ -18,14 +20,21 @@ public class User implements UserDetails {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String username;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
+
+    @Column(name = "expired_at")
+    private LocalDateTime expiredAt;
+
+    @ManyToOne
+    @JoinColumn(name = "role")
+    private Role role;
 
     @OneToOne
     @JoinColumn(name = "active_subscription")
@@ -33,26 +42,31 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return List.of(role);
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        if (expiredAt == null) return true;
+        return LocalDateTime.now().isBefore(expiredAt);
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
+    }
+
+    public boolean isGuest() {
+        return role.getKey() == Role.Key.GUEST;
     }
 }

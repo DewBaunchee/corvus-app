@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from "@angular/core";
-import {AppAction} from "../../../base/models/action/app-action";
+import {ActionView, AppAction} from "../../../base/models/action/app-action";
 import {InjectionActions, InjectionQueueActions} from "../../store/actions/injection-actions";
 import {InjectionQueue} from "../../models/injection/injection-queue-model";
 import {DestroySubject} from "../../../base/models/subjects/destroy-subject";
@@ -11,6 +11,8 @@ import {Injection} from "../../models/injection/injection-model";
 import {AppActions} from "../../../base/models/action/app-actions";
 import {WARNING_COLOR} from "../../../base/util/theme";
 import {SourceActions} from "../../../base/store/actions/source-actions";
+import {ActionSeparator} from "../../../base/models/action/action-separator";
+import {StoreAction} from "../../../base/models/action/store-action";
 
 @Component({
     selector: "queue-page",
@@ -21,22 +23,22 @@ import {SourceActions} from "../../../base/store/actions/source-actions";
 export class QueuePageComponent implements OnInit {
 
     public readonly queueActions = new AppActions([
-        AppAction.createFaIcon(
-            "Inject All",
-            "fa fa-play",
+        new StoreAction(
+            ActionView.createFa("Inject All", "fa fa-play"),
+            this.store,
             InjectionQueueActions.injectAll,
             {}
         ),
-        AppAction.createSeparator(),
-        AppAction.createFaIcon(
-            "Create Injection",
-            "fa fa-plus",
+        new ActionSeparator(),
+        new StoreAction(
+            ActionView.createFa("Create Injection", "fa fa-plus"),
+            this.store,
             InjectionQueueActions.createInjections,
             {count: 1}
         ),
-        AppAction.createFaIcon(
-            "Clear Queue",
-            "fa fa-solid fa-trash",
+        new StoreAction(
+            ActionView.createFa("Clear Queue", "fa fa-solid fa-trash"),
+            this.store,
             InjectionQueueActions.clear,
             {}
         ),
@@ -66,9 +68,9 @@ export class QueuePageComponent implements OnInit {
 
                         if (injection.templateSource?.id > 0) {
                             actions.push(
-                                AppAction.createFaIcon(
-                                    "Validate Template",
-                                    "fa fa-search",
+                                new StoreAction(
+                                    ActionView.createFa("Validate Template", "fa fa-search"),
+                                    this.store,
                                     SourceActions.validateTemplate,
                                     {sourceId: injection.templateSource.id}
                                 )
@@ -77,31 +79,31 @@ export class QueuePageComponent implements OnInit {
 
                         if (injection.status === InjectionStatus.SUCCESS) {
                             actions.push(
-                                AppAction.createFaIcon(
-                                    "Download Result",
-                                    "fa fa-download",
+                                new StoreAction(
+                                    ActionView.createFa("Download Result", "fa fa-download"),
+                                    this.store,
                                     InjectionActions.downloadResult,
                                     {injectionId: injection.id}
-                                ),
+                                )
                             );
                         } else if (injection.status === InjectionStatus.READY) {
                             actions.push(
-                                AppAction.createFaIcon(
-                                    "Inject",
-                                    "fa fa-play",
+                                new StoreAction(
+                                    ActionView.createFa("Inject", "fa fa-play"),
+                                    this.store,
                                     InjectionActions.inject,
                                     {injectionId: injection.id}
-                                ),
+                                )
                             );
                         }
 
                         actions.push(
-                            AppAction.createFaIcon(
-                                "Remove",
-                                "fa fa-solid fa-trash",
+                            new StoreAction(
+                                ActionView.createFa("Remove", "fa fa-solid fa-trash")
+                                    .setColor(WARNING_COLOR),
+                                this.store,
                                 InjectionActions.remove,
-                                {injectionId: injection.id},
-                                {color: WARNING_COLOR}
+                                {injectionId: injection.id}
                             )
                         );
 

@@ -1,0 +1,37 @@
+<h1 mat-dialog-title>Sign Up</h1>
+<form class="app-form" mat-dialog-content [formGroup]="form">
+    <div class="inputs-container">
+        <div class="input-container">
+            <p>Username</p>
+            <input type="text" id="username" formControlName="username">
+            <span class="error" *ngFor="let error of getErrors('username')">
+                {{error}}
+            </span>
+        </div>
+        <div class="input-container">
+            <p>E-Mail</p>
+            <input type="text" id="email" formControlName="email">
+            <span class="error" *ngFor="let error of getErrors('email')">
+                {{error}}
+            </span>
+        </div>
+        <div class="input-container">
+            <p>Password</p>
+            <input type="password" id="password" formControlName="password">
+            <span class="error" *ngFor="let error of getErrors('password')">
+                {{error}}
+            </span>
+        </div>
+        <div class="input-container">
+            <p>Confirm Password</p>
+            <input type="password" id="confirmPassword" formControlName="confirmPassword">
+            <span class="error" *ngFor="let error of getErrors('confirmPassword')">
+                {{error}}
+            </span>
+        </div>
+    </div>
+    <div class="main-button" (click)="proceed()">Proceed</div>
+    <div class="links-container" (click)="signIn()">
+        <span class="link">Already have an account?</span>
+    </div>
+</form>

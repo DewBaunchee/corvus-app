@@ -7,6 +7,7 @@ import {StoreModule} from "@ngrx/store";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {EffectsModule} from "@ngrx/effects";
 import {AsyncPipe, NgIf} from "@angular/common";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
     declarations: [
@@ -19,7 +20,8 @@ import {AsyncPipe, NgIf} from "@angular/common";
         EffectsModule.forRoot(),
         StoreDevtoolsModule.instrument(),
         NgIf,
-        AsyncPipe
+        AsyncPipe,
+        BrowserAnimationsModule
     ],
     providers: [],
     bootstrap: [AppComponent]

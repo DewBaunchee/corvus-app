@@ -1,5 +1,2 @@
-<ng-container *ngIf="action.displayed() | async">
-    <action-icon *ngIf="action.displayType === 'icon'" [action]="action"></action-icon>
-    <action-label *ngIf="action.displayType === 'label'" [action]="action"></action-label>
-    <action-separator *ngIf="action.displayType === 'separator'" [action]="action"></action-separator>
-</ng-container>
+<action-icon *ngIf="action.view.displayType === 'default'" [action]="action"></action-icon>
+<action-separator *ngIf="action.view.displayType === 'separator'" [action]="action"></action-separator>

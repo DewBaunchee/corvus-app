@@ -1,118 +1,73 @@
-import {BehaviorSubject} from "rxjs";
-import {Store} from "@ngrx/store";
-import {AppActionCreator} from "../../util/ngrx";
 import {OnDestroy} from "../observable/destroyable";
-import {NoAction} from "../../../store/actions/app-actions";
 
-export type ActionDisplayType = "separator" | "label" | "icon" | "none";
+export type ActionDisplayType = "default" | "separator" | "none";
+export type ActionLabelPosition = "before-icon" | "after-icon" | "only-title";
 
-export interface ActionStyleOptions {
-    color?: string;
-}
+export class ActionView {
+    public displayType: ActionDisplayType = "default";
+    public label?: string;
+    public labelPosition: ActionLabelPosition = "only-title";
+    public faIcon?: string;
+    public assetIcon?: string;
+    public color?: string;
+    public disabled = false;
 
-export class AppAction<Props = any> extends OnDestroy {
-
-    private readonly _disabled = new BehaviorSubject(false);
-
-    private readonly _displayed = new BehaviorSubject(true);
-
-    private constructor(
-        public readonly name: string,
-        public readonly faIcon: string,
-        public readonly assetIcon: string,
-        public readonly displayType: ActionDisplayType,
-        private readonly actionCreator: AppActionCreator<Props>,
-        private readonly props?: Props,
-        public readonly style?: ActionStyleOptions
-    ) {
-        super();
-        this.completeOnDestroy(() => [this._disabled, this._displayed]);
+    public static none() {
+        return new ActionView().setDisplayType("none");
     }
 
-    public get type() {
-        return this.actionCreator.type;
-    }
-
-    public static createBlank() {
-        return new AppAction("", "", "", "none", NoAction, {});
-    }
-
-    public static createFaIcon<TProps>(name: string,
-                                       faIcon: string,
-                                       actionCreator: AppActionCreator<TProps>,
-                                       props?: TProps,
-                                       style?: ActionStyleOptions) {
-        return new AppAction(name, faIcon, "", "icon", actionCreator, props, style);
-    }
-
-    public static createAssetIcon<TProps>(name: string,
-                                          assetIcon: string,
-                                          actionCreator: AppActionCreator<TProps>,
-                                          props?: TProps,
-                                          style?: ActionStyleOptions) {
-        return new AppAction(name, "", assetIcon, "icon", actionCreator, props, style);
-    }
-
-    public static createLabel<TProps>(name: string,
-                                      actionCreator: AppActionCreator<TProps>,
-                                      props?: TProps,
-                                      style?: ActionStyleOptions) {
-        return new AppAction(name, "", "", "label", actionCreator, props, style);
+    public static createFa(label: string, faIcon: string) {
+        return new ActionView()
+            .setLabel(label)
+            .setFaIcon(faIcon);
     }
 
     public static createSeparator() {
-        return new AppAction("", "", "", "separator", NoAction, {});
+        return new ActionView().setDisplayType("separator");
     }
 
-    public dispatchTo(store: Store, props?: Props) {
-        if (this.isDisabled()) return;
-
-        let finalProps = props;
-        if (!finalProps) finalProps = this.props;
-        if (!finalProps) throw new Error(
-            `Props for action "${this.type}" has not been set during its creation and need to be provided by arguments!`
-        );
-
-        store.dispatch(this.actionCreator(finalProps));
+    public also(action: (it: ActionView) => void) {
+        action(this);
+        return this;
     }
 
-    public setDisabled(value: boolean) {
-        this._disabled.next(value);
+    public setDisplayType(displayType: ActionDisplayType) {
+        return this.also(it => it.displayType = displayType);
     }
 
-    public enable() {
-        this.setDisabled(true);
+    public setLabel(label: string) {
+        return this.also(it => it.label = label);
     }
 
-    public disable() {
-        this.setDisabled(false);
+    public setLabelPosition(labelPosition: ActionLabelPosition) {
+        return this.also(it => it.labelPosition = labelPosition);
     }
 
-    public isDisabled() {
-        return this._disabled.getValue();
+    public setFaIcon(faIcon: string) {
+        return this.also(it => it.faIcon = faIcon);
     }
 
-    public disabled() {
-        return this._disabled.asObservable();
+    public setAssetIcon(assetIcon: string) {
+        return this.also(it => it.assetIcon = assetIcon);
     }
 
-    public setDisplayed(value: boolean) {
-        this._displayed.next(value);
+    public setColor(color: string) {
+        return this.also(it => it.color = color);
     }
 
-    public show() {
-        this.setDisplayed(true);
+    public setDisabled(disabled: boolean) {
+        return this.also(it => it.disabled = disabled);
+    }
+}
+
+export abstract class AppAction extends OnDestroy {
+
+    protected constructor(
+        public readonly type: string,
+        public readonly view: ActionView
+    ) {
+        super();
     }
 
-    public hide() {
-        this.setDisplayed(false);
-    }
-
-    public isDisplayed() {
-        return this._displayed.getValue();
-    }
-
-    public displayed() {
-        return this._displayed.asObservable();
-    }
+    public abstract activate(): void;
 }

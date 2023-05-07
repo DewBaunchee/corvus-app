@@ -4,6 +4,7 @@ $body-color: #dadae0;
 $panel-color: #E5E5E9;
 $panel-border-color: #7c7c7c;
 $prim-color: #4357F2;
+$link-color: #4357F2;
 $text-color: #404040;
 
 .default-shadow {
@@ -37,3 +38,6 @@ $text-color: #404040;
         background: rgba($prim-color, 0.05);
     }
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

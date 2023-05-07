@@ -1,6 +1,0 @@
-<span class="action-label"
-      (click)="doAction()"
-      [title]="action.name"
-      [hidden]="(action.displayed() | async) === false"
-      [ngClass]="{disabled : action.disabled() | async}"
->{{action.name}}</span>

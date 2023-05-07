@@ -2,10 +2,11 @@ import {Component, ElementRef} from "@angular/core";
 import {AbstractSourceComponent} from "../abstract-source-component.directive";
 import {UrlSource} from "../../../../base/models/source/url-source";
 import {AppActions} from "../../../../base/models/action/app-actions";
-import {AppAction} from "../../../../base/models/action/app-action";
-import {NoAction} from "../../../../store/actions/app-actions";
+import {ActionView} from "../../../../base/models/action/app-action";
 import {BehaviorSubject} from "rxjs";
 import {Source} from "../../../../base/models/source/source";
+import {SimpleAction} from "../../../../base/models/action/simple-action";
+import {ActionTypes} from "../../../../constants";
 
 @Component({
     selector: "url-source",
@@ -18,7 +19,10 @@ export class UrlSourceComponent extends AbstractSourceComponent<"URL", UrlSource
     public readonly sourceType = "URL" as const;
 
     public readonly actions = new AppActions([
-        AppAction.createFaIcon("Test link", "fa fa-link", NoAction)
+        new SimpleAction(
+            ActionTypes.TEST_LINK,
+            ActionView.createFa("Test Link", "fa fa-link"),
+        )
     ]);
 
     override set source(value: Source) {

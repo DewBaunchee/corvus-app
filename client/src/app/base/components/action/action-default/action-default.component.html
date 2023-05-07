@@ -1,0 +1,32 @@
+<ng-template
+    *ngTemplateOutlet="action.view.labelPosition === 'before-icon' ? actionLabel : null"
+></ng-template>
+<span class="icon-container"
+      [class.disabled]="action.view.disabled"
+      (click)="doAction()"
+>
+    <span *ngIf="action.view.faIcon"
+          [ngClass]="action.view.faIcon"
+          [title]="action.view.label"
+          [style.color]="action.view.color"
+    ></span>
+    <svg *ngIf="action.view.assetIcon"
+         [title]="action.view.label"
+         [style.color]="action.view.color"
+         viewBox="0 0 16 16" height="1em" xmlns="http://www.w3.org/2000/svg"
+    >
+        <use [attr.href]="action.view.assetIcon"></use>
+    </svg>
+</span>
+<ng-template
+    *ngTemplateOutlet="action.view.labelPosition === 'after-icon' ? actionLabel : null"
+></ng-template>
+
+<ng-template #actionLabel>
+    <span class="action-label"
+          *ngIf="action.view.label"
+          (click)="doAction()"
+          [title]="action.view.label"
+          [ngClass]="{disabled : action.view.disabled}"
+    >{{action.view.label}}</span>
+</ng-template>

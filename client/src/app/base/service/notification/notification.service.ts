@@ -19,4 +19,9 @@ export class NotificationService {
         else
             alert(notification.message);
     }
+
+    public showDevError(message: string) {
+        alert(message);
+        return new Error(message);
+    }
 }

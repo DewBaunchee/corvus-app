@@ -4,16 +4,16 @@
 
         display: flex;
 
-        align-items: flex-end;
-
         padding: 5px;
 
         .logo-container {
             height: 30px;
 
             padding: 5px;
+            margin-right: 25px;
 
             display: flex;
+            align-self: center;
             align-items: center;
             justify-content: center;
             text-align: center;
@@ -21,6 +21,13 @@
             .logo {
                 height: 100%;
             }
+        }
+
+        .left-actions {
+        }
+
+        .right-actions {
+            margin-left: auto;
         }
     }
 }
