@@ -32,6 +32,7 @@ import {securityReducer} from "./store/security/reducer/security.reducer";
 import { ToDatePipe } from "./components/pipes/to-date.pipe";
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from "@angular/material/snack-bar";
 import { EllipsisPipe } from "./components/pipes/ellipsis.pipe";
+import { ProvideEmailDialogComponent } from './components/provide-email-dialog/provide-email-dialog.component';
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import { EllipsisPipe } from "./components/pipes/ellipsis.pipe";
         TabsPanelComponent,
         ToDatePipe,
         EllipsisPipe,
+        ProvideEmailDialogComponent,
     ],
     imports: [
         BrowserModule,

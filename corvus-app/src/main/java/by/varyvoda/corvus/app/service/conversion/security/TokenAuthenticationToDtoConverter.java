@@ -20,6 +20,7 @@ public class TokenAuthenticationToDtoConverter implements Converter<TokenAuthent
         return TokenAuthenticationDto.builder()
             .token(source.getToken())
             .username(source.getName())
+            .hasEmail(source.getUser().getEmail() != null)
             .isGuest(source.getUser().isGuest())
             .build();
     }

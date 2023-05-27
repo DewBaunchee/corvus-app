@@ -1,6 +1,6 @@
 import {Errors} from "../errors/errors";
 
-export interface RegistrationResult {
+export interface FormResult {
     success: boolean;
     errors: Errors;
 }

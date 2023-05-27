@@ -1,7 +1,7 @@
 package by.varyvoda.corvus.app.service.security;
 
+import by.varyvoda.corvus.app.model.dto.security.FormResult;
 import by.varyvoda.corvus.app.model.dto.security.RegistrationForm;
-import by.varyvoda.corvus.app.model.dto.security.RegistrationResult;
 import by.varyvoda.corvus.app.model.errors.Errors;
 import by.varyvoda.corvus.app.model.security.TokenAuthentication;
 import by.varyvoda.corvus.app.model.user.User;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.UUID;
 
+import static by.varyvoda.corvus.app.model.constraints.Constraints.VALID_EMAIL;
 import static by.varyvoda.corvus.app.model.subscription.SubscriptionLevel.Keys.*;
 import static by.varyvoda.corvus.app.model.user.Role.Keys.GUEST;
 import static by.varyvoda.corvus.app.model.user.Role.Keys.USER;
@@ -45,7 +46,7 @@ public class RepositoryUserService implements UserDetailsService, UserService, S
     }
 
     @Override
-    public RegistrationResult register(RegistrationForm form) {
+    public FormResult register(RegistrationForm form) {
         Errors errors = Errors.empty();
 
         String username = form.getUsername();
@@ -56,23 +57,27 @@ public class RepositoryUserService implements UserDetailsService, UserService, S
             errors.addError("username", "Such user already exists");
         }
 
-        if (errors.isNotEmpty()) return fromErrors(errors);
+        if (email != null && email.isBlank()) email = null;
 
-        if (email == null) email = "";
+        if (email != null && !VALID_EMAIL.matcher(email).matches()) {
+            errors.addError("email", "Provided value is not e-mail address.");
+        }
+
+        if (errors.isNotEmpty()) return fromErrors(errors);
 
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(roleService.getRole(USER));
-        subscriptionService.createSubscription(user, email.isBlank() ? BASIC : FULL);
+        subscriptionService.createSubscription(user, email == null ? BASIC : FULL);
         userRepository.save(user);
 
-        return new RegistrationResult(true, Errors.empty());
+        return new FormResult(true, Errors.empty());
     }
 
-    private RegistrationResult fromErrors(Errors errors) {
-        return new RegistrationResult(errors.isEmpty(), errors);
+    private FormResult fromErrors(Errors errors) {
+        return new FormResult(errors.isEmpty(), errors);
     }
 
     @Override

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegistrationResult {
+public class FormResult {
     private boolean success;
     private Errors errors;
 }

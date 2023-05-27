@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Provide E-Mail</h1>
+<form class="app-form" mat-dialog-content [formGroup]="form">
+    <div class="inputs-container">
+        <div class="input-container">
+            <p>E-Mail</p>
+            <input type="text" id="email" formControlName="email">
+            <span class="error" *ngFor="let error of getErrors('email')">
+                {{error}}
+            </span>
+        </div>
+    </div>
+    <div class="main-button" (click)="proceed()">Proceed</div>
+</form>

@@ -1,6 +1,11 @@
 package by.varyvoda.corvus.app.model.constraints;
 
+import java.util.regex.Pattern;
+
 public class Constraints {
+
+    public static final Pattern VALID_EMAIL =
+        Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     public static class Source {
 

@@ -10,4 +10,8 @@ export class ProfileService {
     public loadCurrentSubscription() {
         return this.http.loadCurrentSubscription();
     }
+
+    public provideEmail(email: string) {
+        return this.http.provideEmail(email);
+    }
 }

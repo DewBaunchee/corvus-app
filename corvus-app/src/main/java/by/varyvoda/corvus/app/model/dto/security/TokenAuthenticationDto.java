@@ -16,6 +16,7 @@ public class TokenAuthenticationDto {
     private String token;
     private String username;
     private LocalDateTime guestExpirationDate;
+    private boolean hasEmail;
     private boolean isGuest;
     private Errors errors;
 }

@@ -7,7 +7,7 @@ import {HeaderService} from "../../service/header/header.service";
 import {DestroySubject} from "../../models/subjects/destroy-subject";
 import {AppState} from "../../../store/state/app-state";
 import {Store} from "@ngrx/store";
-import {selectIsGuest} from "../../store/security/selectors/security.selectors";
+import {selectAuthentication} from "../../store/security/selectors/security.selectors";
 import {SecurityService} from "../../service/security/security.service";
 
 @Component({
@@ -29,10 +29,10 @@ export class HeaderComponent {
         private readonly store: Store<AppState>,
         private readonly cdr: ChangeDetectorRef
     ) {
-        store.select(selectIsGuest)
+        store.select(selectAuthentication)
             .pipe(this.destroySubject.takeUntil())
-            .subscribe(isGuest => {
-                if (isGuest) {
+            .subscribe(auth => {
+                if (!auth || auth.guest) {
                     this.rightActions = new AppActions([
                         new SimpleAction(
                             ActionTypes.SIGN_IN,
@@ -42,6 +42,17 @@ export class HeaderComponent {
                     ]);
                 } else {
                     this.rightActions = new AppActions([
+                        ...(
+                            auth.hasEmail
+                                ? []
+                                : [
+                                    new SimpleAction(
+                                        ActionTypes.PROVIDE_EMAIL,
+                                        ActionView.createFa("Provide E-Mail", "fa fa-angle-double-up"),
+                                        () => this.service.openProvideEmailDialog(),
+                                    )
+                                ]
+                        ),
                         new SimpleAction(
                             ActionTypes.SIGN_OUT,
                             ActionView.createFa("Sign Out", "fa fa-sign-out"),

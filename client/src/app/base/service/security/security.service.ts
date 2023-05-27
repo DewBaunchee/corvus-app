@@ -6,7 +6,7 @@ import environment from "../../../../../env/environment";
 import {AUTHORIZATION_HEADER, BASIC_PREFIX} from "../../../constants";
 import {CorrectTokenAuthentication, TokenAuthentication} from "../../models/security/token-authentication";
 import {NotificationService} from "../notification/notification.service";
-import {RegistrationResult} from "../../models/security/registration";
+import {FormResult} from "../../models/security/registration";
 import {AppState} from "../../../store/state/app-state";
 import {Store} from "@ngrx/store";
 import {SecurityActions} from "../../store/security/actions/security.actions";
@@ -55,8 +55,8 @@ export class SecurityService {
         username: string,
         email: string | undefined | null,
         password: string
-    ): Observable<RegistrationResult> {
-        return this.http.post<RegistrationResult>(
+    ): Observable<FormResult> {
+        return this.http.post<FormResult>(
             `${this.root}/register`,
             {username, email, password}
         );
