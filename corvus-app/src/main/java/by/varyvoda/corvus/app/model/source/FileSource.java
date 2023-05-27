@@ -19,7 +19,7 @@ public class FileSource extends Source {
         setType(Type.FILE);
     }
 
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     private byte[] content;
 
 }

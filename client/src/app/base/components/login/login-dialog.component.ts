@@ -52,7 +52,7 @@ export class LoginDialogComponent {
         });
     }
 
-    public signUp() {
+    public toSignUp() {
         this.dialogRef.close();
         this.headerService.openRegisterDialog();
     }

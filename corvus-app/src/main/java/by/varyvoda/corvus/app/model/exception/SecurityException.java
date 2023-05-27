@@ -1,6 +1,6 @@
 package by.varyvoda.corvus.app.model.exception;
 
-public class SecurityException extends RuntimeException {
+public class SecurityException extends CorvusException {
 
     public SecurityException(String message) {
         super(message);

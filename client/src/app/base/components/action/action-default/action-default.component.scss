@@ -1,20 +1,27 @@
-:host {
-    .icon-container {
-        height: 100%;
-        width: 100%;
-        padding: 5px;
+@import "src/styles";
 
+:host {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    height: 100%;
+    width: 100%;
+    padding: 5px;
+
+    border-radius: 5px;
+
+    user-select: none;
+    cursor: pointer;
+
+    &:hover {
+        background: $hover-gray;
+    }
+
+    .icon-container {
         display: flex;
         align-items: center;
         justify-content: center;
-
-        border-radius: 5px;
-
-        cursor: pointer;
-
-
-        &:hover {
-            background: rgba(#000, 0.05);
-        }
     }
 }

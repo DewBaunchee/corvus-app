@@ -10,9 +10,12 @@ export class OutsideClickDirective {
     constructor(private readonly elementRef: ElementRef) {
     }
 
-    @HostListener("document:click", ["$event.target"])
-    public onClick(target: HTMLElement) {
-        if (this.elementRef.nativeElement.contains(target)) return;
+    @HostListener("document:click", ["$event"])
+    public onClick(event: MouseEvent) {
+        const isIn = event.composedPath().find(target =>
+            target === this.elementRef.nativeElement
+        );
+        if (isIn) return;
 
         this.outsideClick.emit();
     }

@@ -3,7 +3,6 @@ import {Source} from "./source";
 export interface FileSource extends Source<"FILE"> {
     name: string;
     loadingProgress: number;
-    base64: string;
 }
 
 export const createFileSource = (file: File, progress: number): FileSource => ({
@@ -11,5 +10,4 @@ export const createFileSource = (file: File, progress: number): FileSource => ({
     type: "FILE",
     name: file.name,
     loadingProgress: progress,
-    base64: ""
 });

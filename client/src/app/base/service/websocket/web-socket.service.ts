@@ -33,12 +33,6 @@ export class WebSocketService {
             this.notification.showError("No queue id in queue message");
             return;
         }
-        if (message.status) {
-            this.store.dispatch(InjectionQueueActions.setStatus({
-                queueId: message.queueId,
-                status: message.status
-            }));
-        }
         if (message.injections) {
             this.store.dispatch(InjectionQueueActions.setInjections({
                 queueId: message.queueId,
@@ -61,6 +55,18 @@ export class WebSocketService {
             this.store.dispatch(InjectionQueueActions.updateInjections({
                 queueId: message.queueId,
                 injections: message.updatedInjections
+            }));
+        }
+        if (message.name) {
+            this.store.dispatch(InjectionQueueActions.setName({
+                queueId: message.queueId,
+                name: message.name
+            }));
+        }
+        if (message.status) {
+            this.store.dispatch(InjectionQueueActions.setStatus({
+                queueId: message.queueId,
+                status: message.status
             }));
         }
     }

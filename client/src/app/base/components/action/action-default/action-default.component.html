@@ -3,7 +3,6 @@
 ></ng-template>
 <span class="icon-container"
       [class.disabled]="action.view.disabled"
-      (click)="doAction()"
 >
     <span *ngIf="action.view.faIcon"
           [ngClass]="action.view.faIcon"
@@ -25,7 +24,6 @@
 <ng-template #actionLabel>
     <span class="action-label"
           *ngIf="action.view.label"
-          (click)="doAction()"
           [title]="action.view.label"
           [ngClass]="{disabled : action.view.disabled}"
     >{{action.view.label}}</span>

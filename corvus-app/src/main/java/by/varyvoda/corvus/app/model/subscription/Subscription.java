@@ -1,14 +1,20 @@
 package by.varyvoda.corvus.app.model.subscription;
 
 import by.varyvoda.corvus.app.model.user.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "subscription")
-@Data
 public class Subscription {
 
     @Id
@@ -19,11 +25,15 @@ public class Subscription {
     @Column(name = "active_until")
     private LocalDateTime activeUntil;
 
+    @Column(name = "active", nullable = false)
+    private Boolean active;
+
     @ManyToOne
-    @JoinColumn(name = "level")
+    @JoinColumn(name = "level", nullable = false)
     private SubscriptionLevel level;
 
     @ManyToOne
     @JoinColumn(name = "\"user\"")
     private User user;
+
 }

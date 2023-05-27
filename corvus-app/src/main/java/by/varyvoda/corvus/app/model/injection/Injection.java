@@ -1,5 +1,6 @@
 package by.varyvoda.corvus.app.model.injection;
 
+import by.varyvoda.corvus.api.format.DocumentFormat;
 import by.varyvoda.corvus.app.model.source.Source;
 import lombok.*;
 
@@ -19,29 +20,33 @@ public class Injection {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "queue")
+    @JoinColumn(name = "queue", nullable = false)
     @ToString.Exclude
     private InjectionQueue queue;
 
-    @Column(name = "order_id")
+    @Column(name = "order_id", nullable = false)
     private Integer orderId;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private InjectionStatus status = InjectionStatus.EMPTY;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "data_source")
     private Source dataSource;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "template_source")
     private Source templateSource;
 
-    @Column(name = "preferred_result_name")
-    private String preferredResultName = "Document.docx";
+    @Column(name = "output_format", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DocumentFormat outputFormat = DocumentFormat.DOCX;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @Column(name = "preferred_result_name", nullable = false)
+    private String preferredResultName = "Document";
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "result_source")
     private Source resultSource;
 

@@ -9,7 +9,11 @@ export class AppActions {
         return this._list;
     }
 
+    public get(type: string) {
+        return this.list.find(action => action.type === type);
+    }
+
     public activate(type: string) {
-        this.list.find(action => action.type === type)?.activate();
+        this.get(type)?.activate();
     }
 }

@@ -6,6 +6,7 @@ $panel-border-color: #7c7c7c;
 $prim-color: #4357F2;
 $link-color: #4357F2;
 $text-color: #404040;
+$hover-gray: rgba(#000, 0.05);
 
 .default-shadow {
     -webkit-box-shadow: -12px 12px 38px -34px rgba(82, 85, 107, 1);
@@ -20,16 +21,25 @@ $text-color: #404040;
     background-color: $panel-color;
 }
 
+.hidden-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
 .drop-zone {
     cursor: pointer;
 
     border: $panel-border-color 2px dashed;
     border-radius: 5px;
 
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
 
+    width: 100%;
     height: 40px;
 
     user-select: none;
@@ -39,5 +49,37 @@ $text-color: #404040;
     }
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.dropdown-body {
+    flex-direction: column;
+    align-items: center;
+
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 0;
+
+    cursor: pointer;
+
+    &.open {
+        display: inline-flex !important;
+    }
+
+    .option-container {
+        width: 100%;
+        padding: 5px;
+        text-align: center;
+
+        &:hover {
+            background: rgba($prim-color, 0.15);
+        }
+    }
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}

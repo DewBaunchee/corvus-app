@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, HostBinding, HostListener} from "@angular/core";
 import {ActionAbstractComponent} from "../action-abstract-component";
 
 @Component({
@@ -8,4 +8,13 @@ import {ActionAbstractComponent} from "../action-abstract-component";
 })
 export class AppActionComponent extends ActionAbstractComponent {
 
+    @HostBinding("class.hidden")
+    public isHidden() {
+        return this.action.isVisible();
+    }
+
+    @HostListener("click")
+    public override doAction() {
+        super.doAction();
+    }
 }

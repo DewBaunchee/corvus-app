@@ -1,6 +1,8 @@
 import {Directive, ElementRef, EventEmitter, HostListener, Input, Output} from "@angular/core";
 import {FileDecorator} from "../../models/file/file-decorator";
 import {GlobalFileInputService} from "../../service/file-input/global-file-input.service";
+import {NotificationService} from "../../service/notification/notification.service";
+import {SubscriptionConstraintsService} from "../../../profile/service/subscription/subscription-constraints.service";
 
 @Directive({
     selector: "[fileUpload]"
@@ -23,10 +25,12 @@ export class FileUploadDirective {
     public browseOnClick = true;
 
     @Input()
-    public enabled= true;
+    public enabled = true;
 
     constructor(
         private readonly elementRef: ElementRef,
+        private readonly notification: NotificationService,
+        private readonly constraints: SubscriptionConstraintsService,
         private readonly globalInput: GlobalFileInputService
     ) {
 
@@ -53,7 +57,7 @@ export class FileUploadDirective {
         event.preventDefault();
         event.stopPropagation();
 
-        if(!this.enabled) return;
+        if (!this.enabled) return;
 
         this.elementRef.nativeElement.classList.add("drag-over");
     }
@@ -63,7 +67,7 @@ export class FileUploadDirective {
         event.preventDefault();
         event.stopPropagation();
 
-        if(!this.enabled) return;
+        if (!this.enabled) return;
 
         this.elementRef.nativeElement.classList.remove("drag-over");
     }
@@ -73,7 +77,7 @@ export class FileUploadDirective {
         event.preventDefault();
         event.stopPropagation();
 
-        if(!this.enabled) return;
+        if (!this.enabled) return;
 
         this.elementRef.nativeElement.classList.remove("drag-over");
 
@@ -89,8 +93,14 @@ export class FileUploadDirective {
         for (let i = 0; i < files.length; i++) {
             const decorated = new FileDecorator(files[i]);
 
-            if (allowedExtensions.length > 0 && !allowedExtensions.includes(decorated.extension))
+            if (allowedExtensions.length > 0 && !allowedExtensions.includes(decorated.extension)) {
                 continue;
+            }
+
+            if (this.constraints.canLoad(decorated)) {
+                this.notification.showError("File is too large: " + decorated.fullName);
+                continue;
+            }
 
             decorators.push(decorated);
         }

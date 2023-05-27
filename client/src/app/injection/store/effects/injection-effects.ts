@@ -15,35 +15,76 @@ export class InjectionEffects {
         exhaustMap(() =>
             this.injectionService.createQueue()
         ),
-        map(NoAction)
+        map(model => InjectionQueueActions.addQueues({queues: [model]}))
+    ));
+
+    public readonly removeQueue = createEffect(() => this.actions$.pipe(
+        ofType(InjectionQueueActions.removeQueue),
+        exhaustMap(({queueId}) =>
+            this.injectionService.removeQueue(queueId).pipe(
+                map(() => InjectionQueueActions.removeQueuesState({queueIds: [queueId]}))
+            )
+        )
+    ));
+
+    public readonly loadAllQueues = createEffect(() => this.actions$.pipe(
+        ofType(InjectionQueueActions.loadAllQueues),
+        exhaustMap(() =>
+            this.injectionService.loadHeaders()
+        ),
+        map(queues => InjectionQueueActions.setQueues({queues}))
     ));
 
     public readonly loadQueue = createEffect(() => this.actions$.pipe(
         ofType(InjectionQueueActions.loadQueue),
-        exhaustMap(() =>
-            this.injectionService.loadQueue(1)
+        exhaustMap(({queueId}) =>
+            this.injectionService.loadQueue(queueId)
+        ),
+        map(queue => InjectionQueueActions.update({queue}))
+    ));
+
+    public readonly injectAll = createEffect(() => this.actions$.pipe(
+        ofType(InjectionQueueActions.injectAll),
+        exhaustMap(({queueId}) =>
+            this.injectionService.injectAll(queueId)
         ),
         map(NoAction)
     ));
 
     public readonly createInjections = createEffect(() => this.actions$.pipe(
         ofType(InjectionQueueActions.createInjections),
-        exhaustMap(({count}) =>
-            this.injectionService.createInjections(1, count)
+        exhaustMap(({queueId, count}) =>
+            this.injectionService.createInjections(queueId, count)
         ),
         map(NoAction)
     ));
 
     public readonly clearAll = createEffect(() => this.actions$.pipe(
         ofType(InjectionQueueActions.clear),
-        exhaustMap(() =>
-            this.injectionService.clearQueue(1)
+        exhaustMap(({queueId}) =>
+            this.injectionService.clearQueue(queueId)
         ),
         map(NoAction)
     ));
 
-    public readonly uploadData = createEffect(() => this.actions$.pipe(
-        ofType(InjectionActions.uploadDataSource),
+    public readonly editName = createEffect(() => this.actions$.pipe(
+        ofType(InjectionQueueActions.changeName),
+        exhaustMap(({queueId, name}) =>
+            this.injectionService.changeQueueName(queueId, name)
+        ),
+        map(NoAction)
+    ));
+
+    public readonly moveInjection = createEffect(() => this.actions$.pipe(
+        ofType(InjectionQueueActions.moveInjection),
+        exhaustMap(({queueId, fromOrderId, toOrderId}) =>
+            this.injectionService.moveInjection(queueId, fromOrderId, toOrderId)
+        ),
+        map(NoAction)
+    ));
+
+    public readonly uploadDataFile = createEffect(() => this.actions$.pipe(
+        ofType(InjectionActions.uploadDataFile),
         mergeMap(({injectionId, file}) =>
             this.injectionService.uploadDataFile(injectionId, file).pipe(
                 this.mapToProgress(),
@@ -57,8 +98,8 @@ export class InjectionEffects {
         ),
     ));
 
-    public readonly uploadTemplate = createEffect(() => this.actions$.pipe(
-        ofType(InjectionActions.uploadTemplateSource),
+    public readonly uploadTemplateFile = createEffect(() => this.actions$.pipe(
+        ofType(InjectionActions.uploadTemplateFile),
         mergeMap(({injectionId, file}) =>
             this.injectionService.uploadTemplateFile(injectionId, file).pipe(
                 this.mapToProgress(),
@@ -69,6 +110,22 @@ export class InjectionEffects {
                     })
                 )
             )
+        ),
+        map(NoAction)
+    ));
+
+    public readonly uploadData = createEffect(() => this.actions$.pipe(
+        ofType(InjectionActions.uploadDataSource),
+        mergeMap(({injectionId, source}) =>
+            this.injectionService.uploadDataSource(injectionId, source)
+        ),
+        map(NoAction)
+    ));
+
+    public readonly uploadTemplate = createEffect(() => this.actions$.pipe(
+        ofType(InjectionActions.uploadTemplateSource),
+        mergeMap(({injectionId, source}) =>
+            this.injectionService.uploadTemplateSource(injectionId, source)
         ),
         map(NoAction)
     ));
@@ -85,6 +142,30 @@ export class InjectionEffects {
         ofType(InjectionActions.downloadResult),
         exhaustMap(({injectionId}) =>
             this.injectionService.downloadResult(injectionId)
+        ),
+        map(NoAction)
+    ));
+
+    public readonly editResultName = createEffect(() => this.actions$.pipe(
+        ofType(InjectionActions.editResultName),
+        exhaustMap(({injectionId, name}) =>
+            this.injectionService.editResultName(injectionId, name)
+        ),
+        map(NoAction)
+    ));
+
+    public readonly changeOutputFormat = createEffect(() => this.actions$.pipe(
+        ofType(InjectionActions.changeOutputFormat),
+        exhaustMap(({injectionId, format}) =>
+            this.injectionService.changeOutputFormat(injectionId, format)
+        ),
+        map(NoAction)
+    ));
+
+    public readonly copy = createEffect(() => this.actions$.pipe(
+        ofType(InjectionActions.copy),
+        exhaustMap(({injectionId}) =>
+            this.injectionService.copy(injectionId)
         ),
         map(NoAction)
     ));

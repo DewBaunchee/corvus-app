@@ -20,8 +20,10 @@ public class InjectionToDtoConverter implements Converter<Injection, InjectionDt
             .queueId(source.getQueue().getId())
             .orderId(source.getOrderId())
             .status(source.getStatus())
-            .dataSource(sourceToDto.convert(source.getDataSource()))
-            .templateSource(sourceToDto.convert(source.getTemplateSource()))
+            .dataSource(sourceToDto.convertNullable(source.getDataSource()))
+            .templateSource(sourceToDto.convertNullable(source.getTemplateSource()))
+            .outputFormat(source.getOutputFormat())
+            .preferredResultName(source.getPreferredResultName())
             .build();
     }
 }

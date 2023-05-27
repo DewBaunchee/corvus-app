@@ -2,38 +2,57 @@ import {createActionGroup, props} from "@ngrx/store";
 import {EmptyProps} from "../../../base/util/ngrx";
 import {InjectionId, InjectionModel} from "../../models/injection/injection-model";
 import {registerActions} from "../../../store/actions/app-actions";
-import {InjectionQueueModel} from "../../models/injection/injection-queue-model";
+import {InjectionQueueModel, InjectionQueueOrHeader} from "../../models/injection/injection-queue-model";
 import {InjectionStatus} from "../../models/injection/injection-status";
 import {Source} from "../../../base/models/source/source";
+import {DocumentFormat} from "../../../base/models/document/document-format";
+
+export type QueueIdProps = { queueId: number };
 
 export const InjectionQueueActions = createActionGroup({
     source: "Injection Queue",
     events: {
         "Create Queue": props<EmptyProps>(),
-        "Load Queue": props<EmptyProps>(),
-        "Set Status": props<{ queueId: number, status: InjectionStatus }>(),
-        "Set Injections": props<{ queueId: number, injections: InjectionModel[] }>(),
-        "Add Injections": props<{ queueId: number, injections: InjectionModel[] }>(),
-        "Remove Injections": props<{ queueId: number, injections: InjectionModel[] }>(),
-        "Update Injections": props<{ queueId: number, injections: InjectionModel[] }>(),
+        "Load All Queues": props<EmptyProps>(),
+        "Set Queues": props<{ queues: InjectionQueueOrHeader[] }>(),
+        "Add Queues": props<{ queues: InjectionQueueOrHeader[] }>(),
+        "Remove Queue": props<QueueIdProps>(),
+        "Remove Queues State": props<{ queueIds: number[] }>(),
+        "Load Queue": props<QueueIdProps>(),
         "Update": props<{ queue: InjectionQueueModel }>(),
-        "Clear": props<EmptyProps>(),
-        "Inject All": props<EmptyProps>(),
-        "Create Injections": props<{ count: number }>(),
+        "Change Name": props<QueueIdProps & { name: string }>(),
+        "Set Name": props<QueueIdProps & { name: string }>(),
+        "Set Status": props<QueueIdProps & { status: InjectionStatus }>(),
+        "Set Injections": props<QueueIdProps & { injections: InjectionModel[] }>(),
+        "Add Injections": props<QueueIdProps & { injections: InjectionModel[] }>(),
+        "Remove Injections": props<QueueIdProps & { injections: InjectionModel[] }>(),
+        "Update Injections": props<QueueIdProps & { injections: InjectionModel[] }>(),
+        "Clear": props<QueueIdProps>(),
+        "Inject All": props<QueueIdProps>(),
+        "Change Current Queue": props<QueueIdProps>(),
+        "Create Injections": props<QueueIdProps & { count: number }>(),
+        "Move Injection": props<QueueIdProps & { fromOrderId: number; toOrderId: number }>()
     },
 });
+
+export type InjectionIdProps = { injectionId: InjectionId };
 
 export const InjectionActions = createActionGroup({
     source: "Injection",
     events: {
-        "Inject": props<{ injectionId: InjectionId }>(),
-        "Download Result": props<{ injectionId: InjectionId }>(),
-        "Remove": props<{ injectionId: InjectionId }>(),
-        "Move": props<{ injectionId: InjectionId, newOrderId: number }>(),
-        "Upload Data Source": props<{ injectionId: InjectionId, file: File }>(),
-        "Upload Template Source": props<{ injectionId: InjectionId, file: File }>(),
-        "Set Data Source": props<{ injectionId: InjectionId, source: Source }>(),
-        "Set Template Source": props<{ injectionId: InjectionId, source: Source }>(),
+        "Copy": props<InjectionIdProps>(),
+        "Remove": props<InjectionIdProps>(),
+        "Move": props<InjectionIdProps & { newOrderId: number }>(),
+        "Upload Data File": props<InjectionIdProps & { file: File }>(),
+        "Upload Template File": props<InjectionIdProps & { file: File }>(),
+        "Upload Data Source": props<InjectionIdProps & { source: Source }>(),
+        "Upload Template Source": props<InjectionIdProps & { source: Source }>(),
+        "Set Data Source": props<InjectionIdProps & { source: Source }>(),
+        "Set Template Source": props<InjectionIdProps & { source: Source }>(),
+        "Change Output Format": props<InjectionIdProps & { format: DocumentFormat }>(),
+        "Edit Result Name": props<InjectionIdProps & { name: string }>(),
+        "Inject": props<InjectionIdProps>(),
+        "Download Result": props<InjectionIdProps>(),
     },
 });
 

@@ -16,7 +16,7 @@ public class SourceController {
 
     @GetMapping("download")
     @ResponseBody
-    public ResponseEntity<byte[]> downloadResult(@RequestParam Long id) {
+    public ResponseEntity<byte[]> downloadSource(@RequestParam Long id) {
         return sourceService.download(id);
     }
 

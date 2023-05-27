@@ -113,7 +113,7 @@ export class SourceSelectorComponent implements OnInit {
 
         combineLatest([
             this.sourceContainer$,
-            this.selectedComponent
+            this.selectedComponent,
         ]).subscribe(([sourceContainer, component]) => {
             if (!sourceContainer) return;
             const element = sourceContainer.nativeElement as HTMLElement;

@@ -18,14 +18,14 @@ public abstract class Source {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "type")
+    @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "extension")
+    @Column(name = "extension", nullable = false)
     private String extension;
 
     public void guessExtension() {

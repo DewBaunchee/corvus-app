@@ -4,7 +4,7 @@ import {QueuePageComponent} from "./components/main/queue-page.component";
 import {BaseModule} from "../base/base.module";
 import {InjectionHttpService} from "./service/injection/injection-http.service";
 import {InjectionService} from "./service/injection/injection.service";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {InfoPanelComponent} from "./components/info-panel/info-panel.component";
 import {QueueComponent} from "./components/queue/queue.component";
@@ -18,6 +18,8 @@ import {SourceSelectorComponent} from "./components/queue-source/source-selector
 import {UrlSourceComponent} from "./components/queue-source/url-source/url-source.component";
 import {ValueSourceComponent} from "./components/queue-source/value-source/value-source.component";
 import {Base64SourceComponent} from "./components/queue-source/base64-source/base64-source.component";
+import {MatDialogModule} from "@angular/material/dialog";
+import { EditTextDialogComponent } from './components/dialogs/edit-text-dialog/edit-text-dialog.component';
 
 
 @NgModule({
@@ -31,6 +33,7 @@ import {Base64SourceComponent} from "./components/queue-source/base64-source/bas
         UrlSourceComponent,
         ValueSourceComponent,
         Base64SourceComponent,
+        EditTextDialogComponent,
     ],
     imports: [
         BaseModule,
@@ -39,7 +42,9 @@ import {Base64SourceComponent} from "./components/queue-source/base64-source/bas
         HttpClientModule,
         NgOptimizedImage,
         StoreModule.forFeature("injection", injectionReducer),
-        EffectsModule.forFeature(InjectionEffects)
+        EffectsModule.forFeature(InjectionEffects),
+        MatDialogModule,
+        ReactiveFormsModule
     ],
     exports: [
         QueuePageComponent

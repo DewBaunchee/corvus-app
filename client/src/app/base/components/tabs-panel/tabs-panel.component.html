@@ -1,0 +1,18 @@
+<ng-container
+    *ngFor="let tab of model.tabs"
+>
+    <span class="tab"
+          [class.active]="tab.id === model.activeTab"
+          (click)="tabClicked(tab.id, tab.name)"
+          (outsideClick)="completeEdit(tab.id)"
+          (keydown.enter)="completeEdit(tab.id)"
+    >
+        <span *ngIf="editingId !== tab.id">{{tab.name}}</span>
+        <input *ngIf="editingId === tab.id" type="text" [(ngModel)]="editingName">
+        <span *ngIf="model.close && tab.closeable"
+              class="close fa fa-close"
+              (click)="model.close(tab.id); $event.preventDefault(); $event.stopPropagation()"
+        ></span>
+    </span>
+</ng-container>
+<app-action *ngIf="model.createAction" class="create-button" [action]="model.createAction"></app-action>

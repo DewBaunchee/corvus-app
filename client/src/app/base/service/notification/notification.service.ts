@@ -1,9 +1,13 @@
 import {Injectable} from "@angular/core";
 import {Notification, NotificationPriority} from "../../models/notification/notification";
 import {isPresent} from "../../util/functions";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable()
 export class NotificationService {
+
+    constructor(private readonly snackbar: MatSnackBar) {
+    }
 
     public showError(message: string, title?: string) {
         this.show({
@@ -15,13 +19,13 @@ export class NotificationService {
 
     public show(notification: Notification) {
         if (isPresent(notification.title))
-            alert(notification.title + ": " + notification.message);
+            this.snackbar.open(notification.title + ": " + notification.message);
         else
-            alert(notification.message);
+            this.snackbar.open(notification.message);
     }
 
     public showDevError(message: string) {
-        alert(message);
+        this.snackbar.open("Dev error: " + message);
         return new Error(message);
     }
 }

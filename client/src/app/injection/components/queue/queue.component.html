@@ -1,8 +1,5 @@
 <div class="queue">
     <div class="header">
-        <span class="title">
-            Queue
-        </span>
         <span class="queue-status-container">
             <injection-status class="queue-status" [status]="queue.model.status"></injection-status>
         </span>
@@ -21,7 +18,13 @@
             <span>or</span>
             <span>Press to create injection</span>
         </div>
-        <div class="queue-element" *ngFor="let injection of queue.injections">
+        <div class="queue-element"
+             *ngFor="let injection of queue.injections; let index = index"
+             [draggable]="true"
+             (dragstart)="onDragStart(index)"
+             (dragenter)="onDragEnter(index)"
+             (dragend)="onDragEnd()"
+        >
             <div class="queue-element-dnd-handler enabled">
                 <img ngSrc="assets/dnd-handler.svg" alt="D&D"
                      width="16" height="16"
@@ -30,32 +33,46 @@
             <div class="queue-element-body">
                 <injection-status class="status" [status]="injection.model.status"></injection-status>
                 <source-selector class="source-selector"
-                                 [editable]="injection.model.status !== 'SUCCESS'"
+                                 [editable]="injection.editable"
                                  [source]="injection.model.dataSource">
                     <file-source
                         defaultName="Data"
                         title="Drop your data file here or select it by click"
                         allowedExtensions="json"
-                        (uploadFile)="uploadData(injection.model.id, $event)"
+                        (uploadFile)="uploadDataFile(injection, $event)"
                         (notEditableClick)="downloadSource(injection.model.dataSource.id)"
                     ></file-source>
-                    <url-source></url-source>
-                    <value-source></value-source>
-                    <base64-source></base64-source>
+                    <url-source (sourceChange)="uploadDataSource(injection, $event)"></url-source>
+                    <value-source (sourceChange)="uploadDataSource(injection, $event)"></value-source>
+                    <base64-source (sourceChange)="uploadDataSource(injection, $event)"></base64-source>
                 </source-selector>
                 <source-selector class="source-selector"
-                                 [editable]="injection.model.status !== 'SUCCESS'"
+                                 [editable]="injection.editable"
                                  [source]="injection.model.templateSource">
                     <file-source
                         defaultName="Template"
                         title="Drop your template file here or select it by click"
                         allowedExtensions="docx"
-                        (uploadFile)="uploadTemplate(injection.model.id, $event)"
-                        (notEditableClick)="downloadSource(injection.model.dataSource.id)"
+                        (uploadFile)="uploadTemplateFile(injection, $event)"
+                        (notEditableClick)="downloadSource(injection.model.templateSource.id)"
                     ></file-source>
-                    <url-source></url-source>
-                    <base64-source></base64-source>
+                    <url-source (sourceChange)="uploadTemplateSource(injection, $event)"></url-source>
+                    <base64-source (sourceChange)="uploadTemplateSource(injection, $event)"></base64-source>
                 </source-selector>
+                <dropdown *ngIf="injection.editable"
+                          class="selector"
+                          title="Output format"
+                          [titleText]="injection.model.outputFormat"
+                >
+                    <div class="option-container"
+                         *ngFor="let option of this.documentFormats"
+                         (click)="changeOutputFormat(injection.model.id, option)"
+                    >
+                        <span class="option"
+                              [title]="option"
+                        >{{option}}</span>
+                    </div>
+                </dropdown>
                 <action-series [actions]="injection.actions.list"></action-series>
             </div>
         </div>

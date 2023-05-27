@@ -4,8 +4,11 @@ import {SimpleAction} from "../../models/action/simple-action";
 import {ActionTypes} from "../../../constants";
 import {ActionView} from "../../models/action/app-action";
 import {HeaderService} from "../../service/header/header.service";
-import {SecurityService} from "../../service/security/security.service";
 import {DestroySubject} from "../../models/subjects/destroy-subject";
+import {AppState} from "../../../store/state/app-state";
+import {Store} from "@ngrx/store";
+import {selectIsGuest} from "../../store/security/selectors/security.selectors";
+import {SecurityService} from "../../service/security/security.service";
 
 @Component({
     selector: "app-header",
@@ -23,9 +26,10 @@ export class HeaderComponent {
     constructor(
         private readonly service: HeaderService,
         private readonly security: SecurityService,
+        private readonly store: Store<AppState>,
         private readonly cdr: ChangeDetectorRef
     ) {
-        security.isGuest()
+        store.select(selectIsGuest)
             .pipe(this.destroySubject.takeUntil())
             .subscribe(isGuest => {
                 if (isGuest) {
@@ -41,7 +45,7 @@ export class HeaderComponent {
                         new SimpleAction(
                             ActionTypes.SIGN_OUT,
                             ActionView.createFa("Sign Out", "fa fa-sign-out"),
-                            () => this.openLoginDialog(),
+                            () => this.security.logout().subscribe(),
                         )
                     ]);
                 }

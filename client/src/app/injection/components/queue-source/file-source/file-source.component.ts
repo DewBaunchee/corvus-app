@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, Output} from "@angular/core";
+import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output} from "@angular/core";
 import {AbstractSourceComponent} from "../abstract-source-component.directive";
 import {FileSource} from "../../../../base/models/source/file-source";
 import {FileDecorator} from "../../../../base/models/file/file-decorator";
@@ -6,8 +6,9 @@ import {FileDecorator} from "../../../../base/models/file/file-decorator";
 @Component({
     selector: "file-source",
     templateUrl: "./file-source.component.html",
-    styleUrls: ["./file-source.component.scss"],
-    providers: [{provide: AbstractSourceComponent, useExisting: FileSourceComponent}]
+    styleUrls: ["./file-source.component.scss", "../source.component.scss"],
+    providers: [{provide: AbstractSourceComponent, useExisting: FileSourceComponent}],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileSourceComponent extends AbstractSourceComponent<"FILE", FileSource> {
 

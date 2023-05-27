@@ -1,5 +1,6 @@
 package by.varyvoda.corvus.app.model.dto.injection;
 
+import by.varyvoda.corvus.api.format.DocumentFormat;
 import by.varyvoda.corvus.app.model.dto.source.SourceDto;
 import by.varyvoda.corvus.app.model.injection.InjectionStatus;
 import lombok.AllArgsConstructor;
@@ -18,4 +19,6 @@ public class InjectionDto {
     private InjectionStatus status;
     private SourceDto dataSource;
     private SourceDto templateSource;
+    private DocumentFormat outputFormat;
+    private String preferredResultName;
 }

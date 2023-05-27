@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class QueueMessage {
     private Integer queueId;
+    private String name;
     private InjectionStatus status;
     private List<InjectionDto> injections;
     private List<InjectionDto> addedInjections;

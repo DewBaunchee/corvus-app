@@ -1,3 +1,5 @@
+import {Errors} from "../errors/errors";
+
 export type TokenAuthentication = CorrectTokenAuthentication | IncorrectTokenAuthentication;
 
 export interface CorrectTokenAuthentication {
@@ -8,7 +10,5 @@ export interface CorrectTokenAuthentication {
 }
 
 export interface IncorrectTokenAuthentication {
-    errors: {
-        [key: string]: string[];
-    };
+    errors: Errors;
 }

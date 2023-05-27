@@ -7,4 +7,5 @@ export enum ActionTypes {
     SIGN_IN = "Sign In",
     SIGN_OUT = "Sign Out",
     TEST_LINK = "Test Link",
+    OPEN_TEXT_DIALOG = "Open Text Dialog",
 }

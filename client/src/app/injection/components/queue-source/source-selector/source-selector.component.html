@@ -1,6 +1,7 @@
 <dropdown *ngIf="editable$ | async"
           class="selector"
           [titleFaIcon]="(selectedOption | async)?.faIcon || ''"
+          [titleText]="(selectedOption | async)?.text || ''"
 >
     <div class="option-container"
          *ngFor="let option of options | async"

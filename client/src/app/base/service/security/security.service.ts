@@ -6,6 +6,12 @@ import environment from "../../../../../env/environment";
 import {AUTHORIZATION_HEADER, BASIC_PREFIX} from "../../../constants";
 import {CorrectTokenAuthentication, TokenAuthentication} from "../../models/security/token-authentication";
 import {NotificationService} from "../notification/notification.service";
+import {RegistrationResult} from "../../models/security/registration";
+import {AppState} from "../../../store/state/app-state";
+import {Store} from "@ngrx/store";
+import {SecurityActions} from "../../store/security/actions/security.actions";
+import {selectAuthentication, selectSecurityState} from "../../store/security/selectors/security.selectors";
+import {ProfileActions} from "../../../profile/store/actions/profile.actions";
 
 const STORAGE_AUTH_KEY = "auth-token";
 const STORAGE_USERNAME_KEY = "username";
@@ -16,10 +22,44 @@ export class SecurityService {
 
     private readonly root = `${environment.baseUrl}/api/security`;
 
+    private currentAuthentication?: CorrectTokenAuthentication;
+
     constructor(
         private readonly http: HttpClient,
+        private readonly store: Store<AppState>,
         private readonly notification: NotificationService
     ) {
+        this.store.select(selectAuthentication).subscribe(auth => {
+            this.currentAuthentication = auth;
+        });
+    }
+
+    public initialize() {
+        this.loadSessionAuthentication();
+        this.store.select(selectSecurityState).subscribe(({authentication}) => {
+            if (!authentication) return;
+            if (!this.isValidAuthentication(authentication)) return;
+
+            this.store.dispatch(ProfileActions.loadProfile({}));
+            this.store.dispatch(ProfileActions.updateUsername({username: authentication.username}));
+        });
+    }
+
+    private loadSessionAuthentication() {
+        const storageEntry = sessionStorage.getItem(STORAGE_AUTH_KEY);
+        const authentication: CorrectTokenAuthentication = storageEntry ? JSON.parse(storageEntry) : null;
+        this.store.dispatch(SecurityActions.updateAuthentication({authentication}));
+    }
+
+    public register(
+        username: string,
+        email: string | undefined | null,
+        password: string
+    ): Observable<RegistrationResult> {
+        return this.http.post<RegistrationResult>(
+            `${this.root}/register`,
+            {username, email, password}
+        );
     }
 
     private basicAuth(username: string, password: string) {
@@ -64,6 +104,7 @@ export class SecurityService {
                 sessionStorage.setItem(STORAGE_USERNAME_KEY, username);
                 sessionStorage.setItem(STORAGE_PASSWORD_KEY, password);
                 sessionStorage.setItem(STORAGE_AUTH_KEY, JSON.stringify(token));
+                this.store.dispatch(SecurityActions.updateAuthentication({authentication: token}));
             }
         }));
     }
@@ -79,22 +120,22 @@ export class SecurityService {
             if (!("errors" in token)) {
                 sessionStorage.setItem(STORAGE_USERNAME_KEY, token.username);
                 sessionStorage.setItem(STORAGE_AUTH_KEY, JSON.stringify(token));
+                this.store.dispatch(SecurityActions.updateAuthentication({authentication: token}));
             }
         }));
     }
 
-    public isGuest(): Observable<boolean> {
-        return this.getAuth().pipe(
-            map(auth => auth.guest)
-        );
+    public logout(): Observable<TokenAuthentication> {
+        sessionStorage.removeItem(STORAGE_USERNAME_KEY);
+        sessionStorage.removeItem(STORAGE_PASSWORD_KEY);
+        sessionStorage.removeItem(STORAGE_AUTH_KEY);
+        return this.loginLikeGuest();
     }
 
     public getAuth(): Observable<CorrectTokenAuthentication> {
-        const storageEntry = sessionStorage.getItem(STORAGE_AUTH_KEY);
-        const auth: CorrectTokenAuthentication = storageEntry ? JSON.parse(storageEntry) : null;
-        if (auth) {
-            if (this.isValidAuthentication(auth)) {
-                return of(auth);
+        if (this.currentAuthentication) {
+            if (this.isValidAuthentication(this.currentAuthentication)) {
+                return of(this.currentAuthentication);
             } else {
                 sessionStorage.removeItem(STORAGE_AUTH_KEY);
             }
@@ -114,7 +155,7 @@ export class SecurityService {
 
     public isValidAuthentication(auth: CorrectTokenAuthentication): boolean {
         const {exp}: JwtPayload = jwtDecode(auth.token);
-        const tokenIsValid = !!exp && Date.now() < exp;
+        const tokenIsValid = !!exp && Date.now() < exp * 1000;
         const guestIsValid = !auth.guestExpirationDate || Date.now() < auth.guestExpirationDate;
         return tokenIsValid && guestIsValid;
     }

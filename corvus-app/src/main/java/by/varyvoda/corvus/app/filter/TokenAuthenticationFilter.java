@@ -2,11 +2,12 @@ package by.varyvoda.corvus.app.filter;
 
 import by.varyvoda.corvus.app.model.security.TokenAuthentication;
 import by.varyvoda.corvus.app.model.user.User;
-import by.varyvoda.corvus.app.service.security.SecurityService;
 import by.varyvoda.corvus.app.service.security.TokenService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpHeaders;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -24,16 +25,22 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
 
-    private final SecurityService securityService;
+    private final UserDetailsService userDetailsService;
 
-    public TokenAuthenticationFilter(@Lazy TokenService tokenService, @Lazy SecurityService securityService) {
+    public TokenAuthenticationFilter(
+        @Lazy TokenService tokenService,
+        @Lazy UserDetailsService userDetailsService
+    ) {
         this.tokenService = tokenService;
-        this.securityService = securityService;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-        throws ServletException, IOException {
+    protected void doFilterInternal(
+        @NonNull HttpServletRequest request,
+        @NonNull HttpServletResponse response,
+        @NonNull FilterChain filterChain
+    ) throws ServletException, IOException {
 
         String uri = request.getRequestURI();
         boolean shouldNotSecure =
@@ -56,7 +63,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         tokenService.validate(token);
         String username = tokenService.getUsername(token);
-        User user = securityService.loadUserByUsername(username);
+        User user = (User) userDetailsService.loadUserByUsername(username);
 
         var authenticationToken =
             TokenAuthentication.builder()

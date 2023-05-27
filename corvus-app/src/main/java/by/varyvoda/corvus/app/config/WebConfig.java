@@ -1,6 +1,7 @@
 package by.varyvoda.corvus.app.config;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.web.server.MimeMappings;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,11 @@ import javax.servlet.MultipartConfigElement;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+    public static final MimeMappings MIME_MAPPINGS = new MimeMappings(MimeMappings.DEFAULT);
+    static  {
+        MIME_MAPPINGS.add("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    }
 
     private final ConversionConfig conversionConfig;
 

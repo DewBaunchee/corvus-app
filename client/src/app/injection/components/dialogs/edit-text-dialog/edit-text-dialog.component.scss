@@ -1,0 +1,37 @@
+@import "src/styles";
+
+:host {
+
+    .container {
+        display: flex;
+
+        form {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+
+            .inputs-container {
+                flex-grow: 1;
+
+                input {
+                    padding: 10px;
+                    width: 400px;
+
+                    &[readonly] {
+                        outline: none;
+                    }
+                }
+
+                textarea {
+                    padding: 10px;
+                    width: 400px;
+                    height: 60vh;
+
+                    &[readonly] {
+                        outline: none;
+                    }
+                }
+            }
+        }
+    }
+}

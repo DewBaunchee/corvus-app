@@ -1,4 +1,9 @@
-<div class="container">
-    <input type="text" placeholder="Your link..." [(ngModel)]="link">
-    <action-series [actions]="actions.list"></action-series>
+<div class="source-zone"
+     [class.editable]="editable"
+     title="Click to edit"
+     (click)="openDialog()"
+>
+    <span>
+        {{(castedSource ? castedSource.url : "") | ellipsis: 20}}
+    </span>
 </div>

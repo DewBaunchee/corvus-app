@@ -1,9 +1,9 @@
 import {Injectable} from "@angular/core";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {exhaustMap, map} from "rxjs";
-import {NoAction} from "../../../store/actions/app-actions";
+import {NoAction} from "../../../../store/actions/app-actions";
 import {SourceActions} from "../actions/source-actions";
-import {SourceService} from "../../service/source/source.service";
+import {SourceService} from "../../../service/source/source.service";
 
 @Injectable()
 export class SourceEffects {

@@ -1,4 +1,5 @@
 import {OnDestroy} from "../observable/destroyable";
+import {BehaviorSubject} from "rxjs";
 
 export type ActionDisplayType = "default" | "separator" | "none";
 export type ActionLabelPosition = "before-icon" | "after-icon" | "only-title";
@@ -62,11 +63,36 @@ export class ActionView {
 
 export abstract class AppAction extends OnDestroy {
 
+    private readonly _visible = new BehaviorSubject(true);
+
     protected constructor(
         public readonly type: string,
         public readonly view: ActionView
     ) {
         super();
+    }
+
+    public setVisible(value: boolean) {
+        this._visible.next(value);
+        return this;
+    }
+
+    public show() {
+        this.setVisible(true);
+        return this;
+    }
+
+    public hide() {
+        this.setVisible(false);
+        return this;
+    }
+
+    public isVisible() {
+        return this._visible.getValue();
+    }
+
+    public visible() {
+        return this._visible.asObservable();
     }
 
     public abstract activate(): void;

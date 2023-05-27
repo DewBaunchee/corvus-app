@@ -2,9 +2,16 @@ import {InjectionStatus} from "./injection-status";
 import {Injection, InjectionId, InjectionModel} from "./injection-model";
 import {AppActions} from "../../../base/models/action/app-actions";
 
+export type InjectionQueueOrHeader = InjectionQueueModel | InjectionQueueHeader;
+
+export interface InjectionQueueHeader {
+    id: number;
+    name: string;
+}
 
 export interface InjectionQueueModel {
     id: number;
+    name: string;
     status: InjectionStatus;
     injections: InjectionModel[];
 }
@@ -12,6 +19,7 @@ export interface InjectionQueueModel {
 export const emptyInjectionQueue: () => InjectionQueueModel =
     () => ({
         id: -1,
+        name: "",
         status: InjectionStatus.EMPTY,
         injections: []
     });

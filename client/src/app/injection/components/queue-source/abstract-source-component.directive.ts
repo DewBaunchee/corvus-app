@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Input} from "@angular/core";
+import {Directive, ElementRef, EventEmitter, Input, Output} from "@angular/core";
 import {Source, SourceType} from "../../../base/models/source/source";
 
 @Directive()
@@ -16,4 +16,6 @@ export abstract class AbstractSourceComponent<ST extends SourceType = SourceType
     }
 
     public castedSource?: S = undefined;
+
+    @Output() public readonly sourceChange = new EventEmitter<S>();
 }

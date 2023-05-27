@@ -1,12 +1,40 @@
-<div class="info-panel">
-    <div class="user-info">
-        <div>Username</div>
-        <div>Subscription</div>
-        <div>Subscription level</div>
+<div class="user-info">
+    <div class="profile-title">Profile</div>
+    <div class="labeled-value-block name">
+        <span class="label">Username:</span>
+        <span class="value">{{username}}</span>
     </div>
-    <hr>
-    <div class="about-app">
-        <div>Made by Varyvoda Matvey</div>
-        <div>BSUIR, 2023</div>
+    <div class="subscription-info" *ngIf="subscription">
+        <div class="title">Subscription Info</div>
+        <div class="labeled-value-block name">
+            <span class="label">Name:</span>
+            <span class="value">{{subscription.level.name}}</span>
+        </div>
+        <div class="labeled-value-block active-until">
+            <span class="label">Active until:</span>
+            <span class="value">{{subscription.activeUntil | date}}</span>
+        </div>
+        <div class="labeled-value-block description">
+            <span class="label">Description:</span>
+            <span class="value">{{subscription.level.description}}</span>
+        </div>
+        <div class="labeled-value-block description">
+            <span class="label">Features:</span>
+            <ul class="features">
+                <li
+                    class="feature"
+                    *ngFor="let feature of subscription.level.features"
+                >
+                    {{feature.description}}
+                </li>
+            </ul>
+        </div>
     </div>
+</div>
+<hr>
+<div class="about-app">
+    <div class="author-title">About Author</div>
+    <div class="author-name">Varyvoda Matvey</div>
+    <div class="author-email">matvey.varyvoda@gmail.com</div>
+    <div class="author-place">BSUIR, 2023</div>
 </div>

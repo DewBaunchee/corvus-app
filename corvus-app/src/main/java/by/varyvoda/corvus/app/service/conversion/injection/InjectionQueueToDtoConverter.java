@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 @Component
@@ -20,9 +21,12 @@ public class InjectionQueueToDtoConverter implements Converter<InjectionQueue, I
     public InjectionQueueDto convert(InjectionQueue source) {
         return InjectionQueueDto.builder()
             .id(source.getId())
+            .name(source.getName())
+            .status(source.getStatus())
             .injections(
                 source.getInjections().stream()
                     .map(injectionToDtoConverter::convert)
+                    .sorted(Comparator.comparing(InjectionDto::getOrderId))
                     .collect(Collectors.toList())
             )
             .build();

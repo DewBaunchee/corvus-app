@@ -1,0 +1,30 @@
+<div class="container">
+    <form mat-dialog-content [formGroup]="form">
+        <div class="inputs-container">
+            <div class="input-container">
+                <input *ngIf="!config.textArea"
+                       class="text-field"
+                       type="text"
+                       id="text"
+                       formControlName="text"
+                       [maxlength]="config.maxLength || null"
+                       [readonly]="config.readonly"
+                       [placeholder]="config.placeholder || ''"
+                       (keydown.control.enter)="hide()"
+                >
+                <textarea *ngIf="config.textArea"
+                          class="text-field"
+                          id="text"
+                          formControlName="text"
+                          [maxlength]="config.maxLength || null"
+                          [readonly]="config.readonly"
+                          [placeholder]="config.placeholder || ''"
+                          (keydown.control.enter)="hide()"
+                ></textarea>
+                <span class="error" *ngFor="let error of getErrors('text')">
+                    {{error}}
+                </span>
+            </div>
+        </div>
+    </form>
+</div>

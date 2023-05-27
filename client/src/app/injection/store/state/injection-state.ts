@@ -1,10 +1,14 @@
-import {emptyInjectionQueue, InjectionQueueModel} from "../../models/injection/injection-queue-model";
+import {InjectionQueueOrHeader} from "../../models/injection/injection-queue-model";
 
 export interface InjectionState {
-    queue: InjectionQueueModel;
+    currentQueueId: number;
+    queues: {
+        [key: number]: InjectionQueueOrHeader;
+    };
 }
 
 export const initialInjectionState: () => InjectionState =
     () => ({
-        queue: emptyInjectionQueue()
+        currentQueueId: -1,
+        queues: {}
     });

@@ -7,36 +7,40 @@ import by.varyvoda.corvus.app.model.exception.CannotResolveSource;
 import by.varyvoda.corvus.app.model.exception.LogException;
 import by.varyvoda.corvus.app.model.source.FileSource;
 import by.varyvoda.corvus.app.model.source.Source;
+import by.varyvoda.corvus.app.repository.InjectionRepository;
 import by.varyvoda.corvus.app.repository.SourceRepository;
 import by.varyvoda.corvus.app.service.source.loader.SourceContentLoader;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.proxy.HibernateProxy;
-import org.springframework.boot.web.server.MimeMappings;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static by.varyvoda.corvus.app.config.WebConfig.MIME_MAPPINGS;
+
 @Service
 public class SimpleSourceService implements SourceService {
 
     private final SourceRepository sourceRepository;
-
+    private final InjectionRepository injectionRepository;
     private final ObjectMapper objectMapper;
-
     private final Map<Source.Type, SourceContentLoader> contentLoaders;
 
     public SimpleSourceService(
         SourceRepository sourceRepository,
+        InjectionRepository injectionRepository,
         ObjectMapper objectMapper,
         List<SourceContentLoader> contentLoaders
     ) {
+        this.injectionRepository = injectionRepository;
         this.sourceRepository = sourceRepository;
         this.objectMapper = objectMapper;
         this.contentLoaders =
@@ -53,6 +57,7 @@ public class SimpleSourceService implements SourceService {
     }
 
     @Override
+    @Transactional
     public FileSource createFileSource(MultipartFile file) {
         try {
             FileSource fileSource = new FileSource();
@@ -67,8 +72,21 @@ public class SimpleSourceService implements SourceService {
     }
 
     @Override
+    @Transactional
     public Source getSource(Long id) {
         return sourceRepository.getByIdOrNull(id);
+    }
+
+    @Override
+    @Transactional
+    public void removeSourceIfOneOrLessUses(Long id) {
+        Source source = sourceRepository.getByIdOrNull(id);
+        if(source == null) return;
+
+        Integer usedInCount = injectionRepository.countByDataSourceOrTemplateSourceOrResultSource(source, source, source);
+        if (usedInCount > 1) return;
+
+        sourceRepository.deleteById(id);
     }
 
     @Override
@@ -103,6 +121,7 @@ public class SimpleSourceService implements SourceService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<byte[]> download(Long id) {
         return download(getSource(id));
     }
@@ -110,7 +129,8 @@ public class SimpleSourceService implements SourceService {
     @Override
     public ResponseEntity<byte[]> download(Source source) {
         return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_TYPE, MimeMappings.DEFAULT.get(source.getExtension()))
+            .header(HttpHeaders.CONTENT_TYPE, MIME_MAPPINGS.get(source.getExtension()))
+            .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION)
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + source.getName() + "\"")
             .body(loadContent(source));
     }

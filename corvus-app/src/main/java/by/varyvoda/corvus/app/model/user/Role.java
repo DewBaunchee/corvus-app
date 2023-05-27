@@ -6,7 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.util.Set;
 
 @Data
 @Builder
@@ -18,15 +22,16 @@ public class Role implements GrantedAuthority {
 
     @Id
     @Column(name = "key")
-    @Enumerated(EnumType.STRING)
-    private Key key;
+    private String key;
 
     @Override
     public String getAuthority() {
-        return key.name();
+        return key;
     }
 
-    public enum Key {
-        GUEST, USER
+    public static class Keys {
+        public static final String GUEST = "GUEST";
+        public static final String USER = "USER";
+        public static final Set<String> ALL = Set.of(GUEST, USER);
     }
 }

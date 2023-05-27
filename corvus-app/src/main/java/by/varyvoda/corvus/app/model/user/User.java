@@ -6,9 +6,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+
+import static by.varyvoda.corvus.app.model.user.Role.Keys.GUEST;
 
 @Entity
 @Table(name = "\"user\"")
@@ -20,25 +22,22 @@ public class User implements UserDetails {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "username", unique = true)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "expired_at")
-    private LocalDateTime expiredAt;
-
     @ManyToOne
-    @JoinColumn(name = "role")
+    @JoinColumn(name = "role", nullable = false)
     private Role role;
 
-    @OneToOne
-    @JoinColumn(name = "active_subscription")
-    private Subscription activeSubscription;
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @JoinColumn(name = "current_subscription", nullable = false)
+    private Subscription currentSubscription;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -47,8 +46,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        if (expiredAt == null) return true;
-        return LocalDateTime.now().isBefore(expiredAt);
+        return true;
     }
 
     @Override
@@ -67,6 +65,11 @@ public class User implements UserDetails {
     }
 
     public boolean isGuest() {
-        return role.getKey() == Role.Key.GUEST;
+        return Objects.equals(role.getKey(), GUEST);
+    }
+
+    @Override
+    public String toString() {
+        return username;
     }
 }

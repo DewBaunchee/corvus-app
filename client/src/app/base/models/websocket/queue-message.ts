@@ -3,6 +3,7 @@ import {InjectionModel} from "../../../injection/models/injection/injection-mode
 
 export interface QueueMessage {
     readonly queueId?: number;
+    readonly name?: string;
     readonly status?: InjectionStatus;
     readonly injections?: InjectionModel[]
     readonly addedInjections?: InjectionModel[]

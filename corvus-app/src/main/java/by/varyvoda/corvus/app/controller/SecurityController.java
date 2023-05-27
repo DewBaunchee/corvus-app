@@ -1,5 +1,7 @@
 package by.varyvoda.corvus.app.controller;
 
+import by.varyvoda.corvus.app.model.dto.security.RegistrationForm;
+import by.varyvoda.corvus.app.model.dto.security.RegistrationResult;
 import by.varyvoda.corvus.app.model.dto.security.TokenAuthenticationDto;
 import by.varyvoda.corvus.app.model.security.TokenAuthentication;
 import by.varyvoda.corvus.app.service.security.SecurityService;
@@ -19,6 +21,11 @@ public class SecurityController {
     private final SecurityService securityService;
 
     private final ConversionService conversion;
+
+    @PostMapping("register")
+    public RegistrationResult register(@RequestBody RegistrationForm form) {
+        return this.securityService.register(form);
+    }
 
     @PostMapping("login")
     public TokenAuthenticationDto login(

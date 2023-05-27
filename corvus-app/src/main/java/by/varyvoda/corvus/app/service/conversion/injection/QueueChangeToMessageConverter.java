@@ -21,6 +21,7 @@ public class QueueChangeToMessageConverter implements Converter<InjectionQueue.C
     public QueueMessage convert(InjectionQueue.Change source) {
         return QueueMessage.builder()
             .queueId(source.getQueueId())
+            .name(source.getName())
             .status(source.getStatus())
             .injections(convertInjections(source.getInjections()))
             .addedInjections(convertInjections(source.getAddedInjections()))

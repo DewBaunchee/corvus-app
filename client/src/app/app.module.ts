@@ -7,7 +7,9 @@ import {StoreModule} from "@ngrx/store";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {EffectsModule} from "@ngrx/effects";
 import {AsyncPipe, NgIf} from "@angular/common";
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {initialState} from "./store/state/app-state";
+import {ProfileModule} from "./profile/profile.module";
 
 @NgModule({
     declarations: [
@@ -15,8 +17,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ],
     imports: [
         BaseModule,
+        ProfileModule,
         InjectionModule,
-        StoreModule.forRoot(),
+        StoreModule.forRoot(undefined, {initialState: initialState()}),
         EffectsModule.forRoot(),
         StoreDevtoolsModule.instrument(),
         NgIf,

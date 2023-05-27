@@ -1,0 +1,84 @@
+@import "src/styles";
+
+:host {
+    @extend .panel;
+    @extend .hidden-scroll;
+
+    display: block;
+    padding: 5px;
+    gap: 10px;
+
+    overflow-y: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
+
+    .tab {
+        @extend .default-shadow;
+        flex-grow: 1;
+
+        overflow-x: hidden;
+        white-space: nowrap;
+
+        display: inline-flex;
+        align-items: center;
+
+        user-select: none;
+        cursor: pointer;
+
+        margin-right: 5px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        gap: 5px;
+
+        &:hover {
+            background: $hover-gray;
+        }
+
+        &.active {
+            font-weight: bold;
+            border-bottom: 3px black solid;
+        }
+
+        input {
+            border-width: 0 0 1px 0;
+            width: 100px;
+            background: rgba(0, 0, 0, 0);
+
+            &:focus {
+                border-width: 0 0 2px 0;
+                outline-width: 0;
+            }
+        }
+
+        &:hover .close {
+            visibility: visible;
+        }
+
+        .close {
+            visibility: hidden;
+
+            padding: 5px;
+            border-radius: 5px;
+
+            &:hover {
+                background: $hover-gray;
+            }
+        }
+    }
+
+    .create-button {
+
+        ::ng-deep action-icon {
+            display: inline-flex;
+            width: auto;
+
+            background: $hover-gray;
+            padding: 0 10px;
+            border-radius: 5px;
+
+            &:hover {
+                background: rgba($prim-color, 0.15);
+            }
+        }
+    }
+}

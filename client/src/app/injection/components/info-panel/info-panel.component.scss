@@ -1,38 +1,74 @@
 @import "src/styles";
 
 :host {
-    .info-panel {
-        @extend .panel;
+    @extend .panel;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 20px;
+
+    .user-info {
+        flex-grow: 4;
 
         display: flex;
         flex-direction: column;
 
-        //.logo-container {
-        //    display: flex;
-        //    align-items: center;
-        //    justify-content: center;
-        //    text-align: center;
-        //    min-height: 100px;
-        //    flex-grow: 2;
-        //
-        //    .logo {
-        //        width: 50%;
-        //        border-radius: 50%;
-        //    }
-        //}
+        gap: 10px;
 
-        .user-info {
-            padding: 10px;
-            flex-grow: 4;
+        .profile-title {
+            text-align: center;
+            font-size: 1.4em;
+            font-weight: bold;
         }
 
-        hr {
-            margin: 10px 20px;
+        .labeled-value-block {
+
+            .label {
+                font-weight: bold;
+                display: block;
+            }
+
+            .value {
+
+            }
         }
 
-        .about-app {
-            padding: 10px;
-            flex-grow: 1;
+        .subscription-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            .title {
+                text-align: center;
+                font-weight: bold;
+                font-size: 1.2em;
+            }
+
+            .features {
+
+                list-style: none;
+
+                .feature {
+                    &:before {
+                        content: '✓';
+                    }
+                }
+            }
+        }
+    }
+
+    hr {
+        margin: 10px 0;
+    }
+
+    .about-app {
+        text-align: center;
+        font-size: 0.8em;
+
+        .author-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
         }
     }
 }

@@ -16,6 +16,7 @@
         border-radius: 5px;
 
         font-size: 1.2em;
+        font-weight: bold;
 
         cursor: pointer;
 
@@ -35,11 +36,12 @@
         -moz-box-shadow: 0 0 12px 1px rgba(34, 60, 80, 0.2);
         box-shadow: 0 0 12px 1px rgba(34, 60, 80, 0.2);
 
+        overflow: hidden;
+
         margin-top: 7px;
 
         display: none;
         position: absolute;
-        padding: 5px;
 
         &.open {
             display: inline;

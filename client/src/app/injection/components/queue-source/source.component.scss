@@ -1,0 +1,12 @@
+@import "src/styles";
+
+:host {
+
+    .source-zone {
+        @extend .drop-zone;
+
+        &:not(.editable) {
+            border-style: solid;
+        }
+    }
+}

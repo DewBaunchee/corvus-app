@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class InjectionQueueDto {
     private Integer id;
+    private String name;
     private InjectionStatus status;
     private List<InjectionDto> injections;
 }

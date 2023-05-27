@@ -20,7 +20,6 @@ public class TokenAuthenticationToDtoConverter implements Converter<TokenAuthent
         return TokenAuthenticationDto.builder()
             .token(source.getToken())
             .username(source.getName())
-            .guestExpirationDate(source.getUser().getExpiredAt())
             .isGuest(source.getUser().isGuest())
             .build();
     }

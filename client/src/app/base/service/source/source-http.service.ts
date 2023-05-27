@@ -1,7 +1,8 @@
 import {Injectable} from "@angular/core";
-import {Observable, of} from "rxjs";
+import {map, Observable, of} from "rxjs";
 import environment from "../../../../../env/environment";
 import {HttpClient} from "@angular/common/http";
+import {downloadBlob} from "../../util/browser";
 
 @Injectable()
 export class SourceHttpService {
@@ -12,8 +13,14 @@ export class SourceHttpService {
     }
 
     public downloadSource(id: number): Observable<void> {
-        window.open(encodeURI(`${this.root}/download?id=${id}`));
-        return of(undefined);
+        return this.http.get(
+            `${this.root}/download?id=${id}`,
+            {responseType: "blob", observe: "response"}
+        ).pipe(
+            map(response => {
+                downloadBlob(response);
+            })
+        );
     }
 
     public validateTemplate(sourceId: number): Observable<void> {

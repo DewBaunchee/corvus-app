@@ -13,6 +13,8 @@ public interface SourceService {
 
     Source getSource(Long id);
 
+    void removeSourceIfOneOrLessUses(Long id);
+
     byte[] loadContent(Source source);
 
     ValueDescriptor loadData(Source source);

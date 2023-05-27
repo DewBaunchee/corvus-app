@@ -1,1 +1,9 @@
-<p>base64-source works!</p>
+<div class="source-zone"
+     [class.editable]="editable"
+     title="Click to edit"
+     (click)="openDialog()"
+>
+    <span>
+        {{(castedSource ? castedSource.value : "") | ellipsis: 20}}
+    </span>
+</div>

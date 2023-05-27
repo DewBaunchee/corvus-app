@@ -23,12 +23,15 @@ public class InjectionQueue {
     @Column(name = "id")
     private Integer id;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private InjectionStatus status = InjectionStatus.EMPTY;
 
     @ManyToOne
-    @JoinColumn(name = "\"user\"")
+    @JoinColumn(name = "\"user\"", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "queue", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -40,6 +43,7 @@ public class InjectionQueue {
     @AllArgsConstructor
     public static class Change {
         private Integer queueId;
+        private String name;
         private InjectionStatus status;
         private List<Injection> injections;
         private List<Injection> addedInjections;
@@ -50,6 +54,10 @@ public class InjectionQueue {
             return builder()
                 .queueId(queue.getId())
                 .status(queue.getStatus());
+        }
+
+        public static Change empty() {
+            return new Change();
         }
     }
 }
