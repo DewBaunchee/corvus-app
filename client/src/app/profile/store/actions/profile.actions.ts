@@ -7,7 +7,9 @@ export const ProfileActions = createActionGroup({
     events: {
         "Load Profile": props<EmptyProps>(),
         "Load Current Subscription": props<EmptyProps>(),
+        "Load Email": props<{ email?: string }>(),
         "Update Current Subscription": props<{ subscription: Subscription }>(),
-        "Update Username": props<{ username: string }>()
+        "Update Username": props<{ username: string }>(),
+        "Update Email": props<{ email?: string }>()
     }
 });

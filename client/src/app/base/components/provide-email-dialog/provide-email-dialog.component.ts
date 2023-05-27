@@ -44,7 +44,7 @@ export class ProvideEmailDialogComponent {
 
         this.profile.provideEmail(email).subscribe(result => {
             if (result.success) {
-                this.store.dispatch(ProfileActions.loadCurrentSubscription({}));
+                this.store.dispatch(ProfileActions.loadProfile({}));
                 this.dialogRef.close();
                 return;
             }

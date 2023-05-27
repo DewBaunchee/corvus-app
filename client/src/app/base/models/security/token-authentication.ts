@@ -5,7 +5,6 @@ export type TokenAuthentication = CorrectTokenAuthentication | IncorrectTokenAut
 export interface CorrectTokenAuthentication {
     token: string;
     username: string;
-    hasEmail: boolean;
     guestExpirationDate?: number;
     guest: boolean;
 }

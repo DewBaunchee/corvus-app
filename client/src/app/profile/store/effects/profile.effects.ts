@@ -9,7 +9,10 @@ export class ProfileEffects {
 
     public readonly loadProfile = createEffect(() => this.actions$.pipe(
         ofType(ProfileActions.loadProfile),
-        mergeMap(() => [ProfileActions.loadCurrentSubscription({})]),
+        mergeMap(() => [
+            ProfileActions.loadCurrentSubscription({}),
+            ProfileActions.loadEmail({})
+        ]),
     ));
 
     public readonly loadCurrentSubscription = createEffect(() => this.actions$.pipe(
@@ -18,6 +21,14 @@ export class ProfileEffects {
             this.profileService.loadCurrentSubscription()
         ),
         map(subscription => ProfileActions.updateCurrentSubscription({subscription}))
+    ));
+
+    public readonly loadEmail = createEffect(() => this.actions$.pipe(
+        ofType(ProfileActions.loadEmail),
+        exhaustMap(() =>
+            this.profileService.loadEmail()
+        ),
+        map(email => ProfileActions.updateEmail({email}))
     ));
 
     constructor(

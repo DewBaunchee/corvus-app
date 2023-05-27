@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Subscription} from "../../models/subscription";
 import environment from "../../../../../env/environment";
-import {Observable} from "rxjs";
+import {map, Observable} from "rxjs";
 import {FormResult} from "../../../base/models/security/registration";
 
 @Injectable()
@@ -16,6 +16,15 @@ export class ProfileHttpService {
     public loadCurrentSubscription() {
         return this.http.get<Subscription>(
             `${this.root}/subscription/current`
+        );
+    }
+
+    public loadEmail() {
+        return this.http.get(
+            `${this.root}/email/get`,
+            {responseType: "text"}
+        ).pipe(
+            map(email => email ? email : undefined)
         );
     }
 

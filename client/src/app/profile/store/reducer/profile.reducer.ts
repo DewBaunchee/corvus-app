@@ -11,5 +11,9 @@ export const profileReducer = createReducer(
     on(ProfileActions.updateUsername, (state, {username}): ProfileState => ({
         ...state,
         username
+    })),
+    on(ProfileActions.updateEmail, (state, {email}): ProfileState => ({
+        ...state,
+        email
     }))
 );

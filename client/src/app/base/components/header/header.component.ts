@@ -9,6 +9,8 @@ import {AppState} from "../../../store/state/app-state";
 import {Store} from "@ngrx/store";
 import {selectAuthentication} from "../../store/security/selectors/security.selectors";
 import {SecurityService} from "../../service/security/security.service";
+import {combineLatest} from "rxjs";
+import {selectProfileState} from "../../../profile/store/selectors/profile.selectors";
 
 @Component({
     selector: "app-header",
@@ -29,9 +31,12 @@ export class HeaderComponent {
         private readonly store: Store<AppState>,
         private readonly cdr: ChangeDetectorRef
     ) {
-        store.select(selectAuthentication)
+        combineLatest([
+            store.select(selectProfileState),
+            store.select(selectAuthentication)
+        ])
             .pipe(this.destroySubject.takeUntil())
-            .subscribe(auth => {
+            .subscribe(([profile, auth]) => {
                 if (!auth || auth.guest) {
                     this.rightActions = new AppActions([
                         new SimpleAction(
@@ -43,7 +48,7 @@ export class HeaderComponent {
                 } else {
                     this.rightActions = new AppActions([
                         ...(
-                            auth.hasEmail
+                            profile.email
                                 ? []
                                 : [
                                     new SimpleAction(

@@ -25,6 +25,12 @@ public class ProfileController {
         return conversion.convert(user.getCurrentSubscription(), SubscriptionDto.class);
     }
 
+    @GetMapping("email/get")
+    public String getEmail(Principal principal) {
+        User user = asUser(principal);
+        return user.getEmail();
+    }
+
     @PostMapping("email/set")
     public FormResult setEmail(@RequestParam String email, Principal principal) {
         User user = asUser(principal);
