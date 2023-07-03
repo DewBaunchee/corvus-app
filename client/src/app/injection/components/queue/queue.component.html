@@ -12,6 +12,7 @@
              mode="multiple"
              allowedExtensions="docx"
              [browseOnClick]="false"
+             (files)="createFromTemplates($event)"
              (click)="createInjection()"
         >
             <span>Drop your templates here</span>
@@ -37,7 +38,7 @@
                                  [source]="injection.model.dataSource">
                     <file-source
                         defaultName="Data"
-                        title="Drop your data file here or select it by click"
+                        [title]="injection.editable ? 'Drop your data file here or select it by click' : 'Click to download data file'"
                         allowedExtensions="json"
                         (uploadFile)="uploadDataFile(injection, $event)"
                         (notEditableClick)="downloadSource(injection.model.dataSource.id)"
@@ -51,7 +52,7 @@
                                  [source]="injection.model.templateSource">
                     <file-source
                         defaultName="Template"
-                        title="Drop your template file here or select it by click"
+                        [title]="injection.editable ? 'Drop your template file here or select it by click' : 'Click to download template'"
                         allowedExtensions="docx"
                         (uploadFile)="uploadTemplateFile(injection, $event)"
                         (notEditableClick)="downloadSource(injection.model.templateSource.id)"

@@ -2,6 +2,7 @@ package by.varyvoda.corvus.app.service.injection;
 
 import by.varyvoda.corvus.api.format.DocumentFormat;
 import by.varyvoda.corvus.app.model.injection.InjectionQueue;
+import by.varyvoda.corvus.app.model.source.FileSource;
 import by.varyvoda.corvus.app.model.source.Source;
 import by.varyvoda.corvus.app.model.user.User;
 
@@ -28,6 +29,8 @@ public interface InjectionService {
 
     InjectionQueue.Change createInjections(Integer queueId, int count, User user);
 
+    InjectionQueue.Change createFromTemplate(Integer queueId, Source templateSource, User user);
+
     InjectionQueue.Change setDataSource(Integer injectionId, Source source, User user);
 
     InjectionQueue.Change setTemplateSource(Integer injectionId, Source source, User user);
@@ -37,6 +40,8 @@ public interface InjectionService {
     InjectionQueue.Change setOutputFormat(Integer injectionId, DocumentFormat format, User user);
 
     InjectionQueue.Change inject(Integer injectionId, User user);
+
+    FileSource validate(Integer injectionId, User user);
 
     InjectionQueue.Change copy(Integer injectionId, User user);
 

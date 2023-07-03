@@ -31,6 +31,7 @@ export const InjectionQueueActions = createActionGroup({
         "Inject All": props<QueueIdProps>(),
         "Change Current Queue": props<QueueIdProps>(),
         "Create Injections": props<QueueIdProps & { count: number }>(),
+        "Create From Templates": props<QueueIdProps & { files: File[] }>(),
         "Move Injection": props<QueueIdProps & { fromOrderId: number; toOrderId: number }>()
     },
 });
@@ -52,6 +53,7 @@ export const InjectionActions = createActionGroup({
         "Change Output Format": props<InjectionIdProps & { format: DocumentFormat }>(),
         "Edit Result Name": props<InjectionIdProps & { name: string }>(),
         "Inject": props<InjectionIdProps>(),
+        "Validate Template": props<{ injectionId: number }>(),
         "Download Result": props<InjectionIdProps>(),
     },
 });

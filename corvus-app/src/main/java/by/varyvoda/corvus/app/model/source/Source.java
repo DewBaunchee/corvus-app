@@ -22,10 +22,10 @@ public abstract class Source {
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "extension", nullable = false)
+    @Column(name = "extension")
     private String extension;
 
     public void guessExtension() {

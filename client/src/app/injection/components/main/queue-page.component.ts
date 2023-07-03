@@ -14,7 +14,6 @@ import {InjectionStatus} from "../../models/injection/injection-status";
 import {Injection} from "../../models/injection/injection-model";
 import {AppActions} from "../../../base/models/action/app-actions";
 import {WARNING_COLOR} from "../../../base/util/theme";
-import {SourceActions} from "../../../base/store/source/actions/source-actions";
 import {ActionSeparator} from "../../../base/models/action/action-separator";
 import {StoreAction} from "../../../base/models/action/store-action";
 import {createTabsModel} from "../../../base/models/tabs/tabs-model";
@@ -23,6 +22,7 @@ import {OpenTextDialogAction} from "../../../base/models/action/open-text-dialog
 import {MatDialog} from "@angular/material/dialog";
 import {combineLatest, of, switchMap} from "rxjs";
 import {SubscriptionConstraintsService} from "../../../profile/service/subscription/subscription-constraints.service";
+import {SimpleAction} from "../../../base/models/action/simple-action";
 
 @Component({
     selector: "queue-page",
@@ -134,7 +134,9 @@ export class QueuePageComponent implements OnInit {
 
     private updateQueue(queue: InjectionQueueModel, canCreateInjection: boolean) {
 
-        this.queueActions.get(InjectionQueueActions.createInjections.type)?.setVisible(canCreateInjection);
+        this.queueActions.get(InjectionQueueActions.createInjections.type)?.setDisabled(!canCreateInjection);
+        this.queueActions.get(InjectionQueueActions.injectAll.type)?.setDisabled(queue.status !== InjectionStatus.READY);
+        this.queueActions.get(InjectionQueueActions.clear.type)?.setDisabled(queue.injections.length === 0);
 
         this.queue = InjectionQueue.fromModel(
             queue, this.queueActions,
@@ -146,8 +148,8 @@ export class QueuePageComponent implements OnInit {
                         new StoreAction(
                             ActionView.createFa("Validate Template", "fa fa-search"),
                             this.store,
-                            SourceActions.validateTemplate,
-                            {sourceId: injection.templateSource.id}
+                            InjectionActions.validateTemplate,
+                            {injectionId: injection.id}
                         )
                     );
                 }
@@ -163,11 +165,13 @@ export class QueuePageComponent implements OnInit {
                     );
                 } else if (injection.status === InjectionStatus.READY) {
                     actions.push(
-                        new StoreAction(
+                        new SimpleAction(
+                            InjectionActions.inject.type,
                             ActionView.createFa("Inject", "fa fa-play"),
-                            this.store,
-                            InjectionActions.inject,
-                            {injectionId: injection.id}
+                            it => {
+                                it.disable();
+                                this.store.dispatch(InjectionActions.inject({injectionId: injection.id}));
+                            }
                         )
                     );
                 }

@@ -64,6 +64,7 @@ export class ActionView {
 export abstract class AppAction extends OnDestroy {
 
     private readonly _visible = new BehaviorSubject(true);
+    private readonly _disabled = new BehaviorSubject(false);
 
     protected constructor(
         public readonly type: string,
@@ -93,6 +94,29 @@ export abstract class AppAction extends OnDestroy {
 
     public visible() {
         return this._visible.asObservable();
+    }
+
+    public setDisabled(value: boolean) {
+        this._disabled.next(value);
+        return this;
+    }
+
+    public enable() {
+        this.setDisabled(false);
+        return this;
+    }
+
+    public disable() {
+        this.setDisabled(true);
+        return this;
+    }
+
+    public isDisabled() {
+        return this._disabled.getValue();
+    }
+
+    public disabled() {
+        return this._disabled.asObservable();
     }
 
     public abstract activate(): void;

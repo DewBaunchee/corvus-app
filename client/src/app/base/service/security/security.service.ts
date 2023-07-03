@@ -12,6 +12,7 @@ import {Store} from "@ngrx/store";
 import {SecurityActions} from "../../store/security/actions/security.actions";
 import {selectAuthentication, selectSecurityState} from "../../store/security/selectors/security.selectors";
 import {ProfileActions} from "../../../profile/store/actions/profile.actions";
+import {InjectionQueueActions} from "../../../injection/store/actions/injection-actions";
 
 const STORAGE_AUTH_KEY = "auth-token";
 const STORAGE_USERNAME_KEY = "username";
@@ -42,6 +43,7 @@ export class SecurityService {
 
             this.store.dispatch(ProfileActions.loadProfile({}));
             this.store.dispatch(ProfileActions.updateUsername({username: authentication.username}));
+            this.store.dispatch(InjectionQueueActions.loadAllQueues({}));
         });
     }
 

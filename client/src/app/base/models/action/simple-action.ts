@@ -5,7 +5,7 @@ export class SimpleAction extends AppAction {
     constructor(
         type: string,
         view: ActionView,
-        private readonly handler = () => {
+        private readonly handler = (it: SimpleAction) => {
             // Nothing
         }
     ) {
@@ -13,6 +13,6 @@ export class SimpleAction extends AppAction {
     }
 
     public override activate() {
-        this.handler();
+        this.handler(this);
     }
 }

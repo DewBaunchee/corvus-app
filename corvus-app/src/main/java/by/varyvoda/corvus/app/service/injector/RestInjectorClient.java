@@ -17,6 +17,11 @@ public class RestInjectorClient implements InjectorClient {
     private String apiHost;
 
     @Override
+    public InjectorResponse validate(InjectionRequest request) {
+        return rest.postForObject(apiHost + "/validate", request, InjectorResponse.class);
+    }
+
+    @Override
     public InjectorResponse inject(InjectionRequest request) {
         return rest.postForObject(apiHost + "/inject", request, InjectorResponse.class);
     }

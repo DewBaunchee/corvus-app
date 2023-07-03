@@ -19,5 +19,7 @@ const getName = (response: HttpResponse<unknown>) => {
     const contentDisposition = response.headers.get("content-disposition");
     if (!contentDisposition) return "unnamed";
     const name = contentDisposition.split("=")[1];
-    return name.substring(1, name.length - 1);
+    const charsetDelimiterIndex = name.indexOf("''");
+    const nameStart = charsetDelimiterIndex === -1 ? 1 : charsetDelimiterIndex + 2;
+    return decodeURI(name.substring(nameStart, name.length));
 };

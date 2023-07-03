@@ -18,7 +18,8 @@ public class DefaultControllerAdvice {
 
     @ExceptionHandler(CorvusException.class)
     public ResponseEntity<String> handleException(CorvusException e) {
-        return new ResponseEntity<>("Internal application error", HttpStatus.INTERNAL_SERVER_ERROR);
+        e.printStackTrace();
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(SubscriptionException.class)

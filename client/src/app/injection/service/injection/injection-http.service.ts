@@ -70,6 +70,15 @@ export class InjectionHttpService {
             });
     }
 
+    public createFromTemplate(queueId: number, file: File) {
+        return this.uploadFile(
+            file,
+            `${this.root}/create/from/template`,
+            new HttpParams()
+                .set("queueId", queueId)
+        );
+    }
+
     public clearQueue(queueId: number) {
         return this.http.post(
             `${this.root}/queue/clear`,
@@ -94,11 +103,11 @@ export class InjectionHttpService {
     }
 
     public uploadDataFile(injectionId: InjectionId, data: File) {
-        return this.uploadFile(injectionId, data, `${this.root}/upload/data/file`);
+        return this.uploadFile(data, `${this.root}/upload/data/file`, this.injectionIdParams(injectionId));
     }
 
     public uploadTemplateFile(injectionId: InjectionId, data: File) {
-        return this.uploadFile(injectionId, data, `${this.root}/upload/template/file`);
+        return this.uploadFile(data, `${this.root}/upload/template/file`, this.injectionIdParams(injectionId));
     }
 
     public uploadDataSource(injectionId: InjectionId, data: Source) {
@@ -121,7 +130,7 @@ export class InjectionHttpService {
         );
     }
 
-    private uploadFile(injectionId: InjectionId, file: File, url: string) {
+    private uploadFile(file: File, url: string, params: HttpParams) {
         const formData = new FormData();
         formData.set("file", file);
 
@@ -129,7 +138,7 @@ export class InjectionHttpService {
             "POST", url, formData,
             {
                 reportProgress: true,
-                params: this.injectionIdParams(injectionId)
+                params
             }
         );
 
@@ -143,6 +152,22 @@ export class InjectionHttpService {
             {
                 params: this.injectionIdParams(injectionId)
             }
+        );
+    }
+
+    public validateTemplate(injectionId: number): Observable<void> {
+        return this.http.post(
+            `${this.root}/validate/template`,
+            {},
+            {
+                responseType: "blob",
+                observe: "response",
+                params: new HttpParams().set("injectionId", injectionId)
+            }
+        ).pipe(
+            map(response => {
+                downloadBlob(response);
+            })
         );
     }
 

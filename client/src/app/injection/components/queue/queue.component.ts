@@ -34,6 +34,15 @@ export class QueueComponent {
         return this.queue.model;
     }
 
+    public createFromTemplates(files: FileDecorator[]) {
+        this.store.dispatch(
+            InjectionQueueActions.createFromTemplates({
+                queueId: this.model.id,
+                files: files.map(file => file.file)
+            })
+        );
+    }
+
     public createInjection() {
         this.queue.actions.activate(InjectionQueueActions.createInjections.type);
     }

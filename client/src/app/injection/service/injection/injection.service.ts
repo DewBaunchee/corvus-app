@@ -40,6 +40,10 @@ export class InjectionService {
         return this.http.createInjections(queueId, count);
     }
 
+    public createFromTemplate(queueId: number, file: File) {
+        return this.http.createFromTemplate(queueId, file);
+    }
+
     public clearQueue(queueId: number) {
         return this.http.clearQueue(queueId);
     }
@@ -66,6 +70,10 @@ export class InjectionService {
 
     public inject(injectionId: InjectionId) {
         return this.http.inject(injectionId);
+    }
+
+    public validateTemplate(injectionId: number) {
+        return this.http.validateTemplate(injectionId);
     }
 
     public downloadResult(injectionId: InjectionId) {

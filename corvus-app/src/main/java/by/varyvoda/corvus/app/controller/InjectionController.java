@@ -83,6 +83,13 @@ public class InjectionController {
         send(change);
     }
 
+    @PostMapping("create/from/template")
+    public void createFromTemplate(@RequestParam Integer queueId, @RequestParam MultipartFile file, Principal principal) {
+        var templateSource = sourceService.createFileSource(file);
+        var change = queueService.createFromTemplate(queueId, templateSource, asUser(principal));
+        send(change);
+    }
+
     @PostMapping("upload/data/file")
     public void uploadDataFile(@RequestParam Integer injectionId, @RequestParam MultipartFile file, Principal principal) {
         var user = asUser(principal);
@@ -123,6 +130,12 @@ public class InjectionController {
     public void inject(@RequestParam Integer injectionId, Principal principal) {
         var change = queueService.inject(injectionId, asUser(principal));
         send(change);
+    }
+
+    @PostMapping("validate/template")
+    public ResponseEntity<byte[]> validateTemplate(@RequestParam Integer injectionId, Principal principal) {
+        var validated = queueService.validate(injectionId, asUser(principal));
+        return sourceService.download(validated);
     }
 
     @PostMapping("copy")

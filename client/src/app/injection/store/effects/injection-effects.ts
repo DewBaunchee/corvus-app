@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {InjectionActions, InjectionQueueActions} from "../actions/injection-actions";
-import {exhaustMap, filter, map, mergeMap, pipe} from "rxjs";
+import {combineLatest, exhaustMap, filter, map, mergeMap, pipe, switchMap} from "rxjs";
 import {InjectionService} from "../../service/injection/injection.service";
 import {NoAction} from "../../../store/actions/app-actions";
 import {HttpEvent, HttpEventType, HttpProgressEvent} from "@angular/common/http";
@@ -55,6 +55,18 @@ export class InjectionEffects {
         ofType(InjectionQueueActions.createInjections),
         exhaustMap(({queueId, count}) =>
             this.injectionService.createInjections(queueId, count)
+        ),
+        map(NoAction)
+    ));
+
+    public readonly createFromTemplates = createEffect(() => this.actions$.pipe(
+        ofType(InjectionQueueActions.createFromTemplates),
+        switchMap(({queueId, files}) =>
+            combineLatest(
+                files.map(file =>
+                    this.injectionService.createFromTemplate(queueId, file)
+                )
+            )
         ),
         map(NoAction)
     ));
@@ -134,6 +146,14 @@ export class InjectionEffects {
         ofType(InjectionActions.inject),
         exhaustMap(({injectionId}) =>
             this.injectionService.inject(injectionId)
+        ),
+        map(NoAction)
+    ));
+
+    public readonly validateTemplate = createEffect(() => this.actions$.pipe(
+        ofType(InjectionActions.validateTemplate),
+        exhaustMap(({injectionId}) =>
+            this.injectionService.validateTemplate(injectionId)
         ),
         map(NoAction)
     ));

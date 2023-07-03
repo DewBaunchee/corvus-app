@@ -5,7 +5,6 @@ export const SourceActions = createActionGroup({
     source: "sources",
     events: {
         "Download": props<{ id: number }>(),
-        "Validate Template": props<{ sourceId: number }>(),
     }
 });
 

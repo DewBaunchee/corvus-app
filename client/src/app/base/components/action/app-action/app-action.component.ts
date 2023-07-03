@@ -9,8 +9,13 @@ import {ActionAbstractComponent} from "../action-abstract-component";
 export class AppActionComponent extends ActionAbstractComponent {
 
     @HostBinding("class.hidden")
-    public isHidden() {
-        return this.action.isVisible();
+    public get isHidden() {
+        return !this.action.isVisible();
+    }
+
+    @HostBinding("class.disabled")
+    public get isDisabled() {
+        return this.action.isDisabled();
     }
 
     @HostListener("click")

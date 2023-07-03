@@ -12,7 +12,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(
             catchError(({error}: HttpErrorResponse) => {
-                if (error instanceof Error) {
+                if (error instanceof ProgressEvent) {
+                    this.notification.showError("Server disconnected.");
+                } else if (error instanceof Error) {
                     this.notification.showError(error.message);
                 } else {
                     this.notification.showError(error);

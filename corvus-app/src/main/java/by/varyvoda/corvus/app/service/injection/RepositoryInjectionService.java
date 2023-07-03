@@ -3,6 +3,8 @@ package by.varyvoda.corvus.app.service.injection;
 import by.varyvoda.corvus.api.format.DocumentFormat;
 import by.varyvoda.corvus.api.request.InjectionRequest;
 import by.varyvoda.corvus.api.response.InjectorResponse;
+import by.varyvoda.corvus.api.value.object.ObjectValueDescriptor;
+import by.varyvoda.corvus.app.model.exception.CorvusException;
 import by.varyvoda.corvus.app.model.exception.ForbiddenException;
 import by.varyvoda.corvus.app.model.injection.Injection;
 import by.varyvoda.corvus.app.model.injection.InjectionQueue;
@@ -12,13 +14,14 @@ import by.varyvoda.corvus.app.model.source.Source;
 import by.varyvoda.corvus.app.model.user.User;
 import by.varyvoda.corvus.app.repository.InjectionQueueRepository;
 import by.varyvoda.corvus.app.repository.InjectionRepository;
-import by.varyvoda.corvus.app.service.injector.InjectorClient;
+import by.varyvoda.corvus.app.service.InjectorService;
 import by.varyvoda.corvus.app.service.source.SourceService;
 import by.varyvoda.corvus.app.service.subscription.SubscriptionConstraintsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -32,7 +35,7 @@ public class RepositoryInjectionService implements InjectionService {
     private final InjectionQueueRepository queueRepository;
     private final InjectionRepository injectionRepository;
     private final SourceService sourceService;
-    private final InjectorClient injector;
+    private final InjectorService injector;
 
     @Override
     public InjectionQueue loadQueue(Integer id, User user) {
@@ -49,6 +52,7 @@ public class RepositoryInjectionService implements InjectionService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.NEVER)
     public void injectAll(Integer queueId, Consumer<InjectionQueue.Change> progressConsumer, User user) {
         var queue = getQueue(queueId);
         checkOwner(queue, user);
@@ -188,6 +192,29 @@ public class RepositoryInjectionService implements InjectionService {
     }
 
     @Override
+    public InjectionQueue.Change createFromTemplate(Integer queueId, Source templateSource, User user) {
+        constraints.checkInjectionCreation(user, queueId, 1);
+
+        var queue = getQueue(queueId);
+        checkOwner(queue, user);
+
+        int existInjectionCount = queue.getInjections().size();
+        Injection injection = new Injection();
+
+        injection.setOrderId(existInjectionCount);
+        injection.setQueue(queue);
+        injection.setTemplateSource(templateSource);
+
+        queue.getInjections().add(injection);
+
+        updateStatus(queue);
+
+        return InjectionQueue.Change.startBuilding(queue)
+            .addedInjections(List.of(injection))
+            .build();
+    }
+
+    @Override
     public InjectionQueue.Change setDataSource(Integer injectionId, Source source, User user) {
         var injection = injectionRepository.getById(injectionId);
         checkOwner(injection, user);
@@ -254,20 +281,20 @@ public class RepositoryInjectionService implements InjectionService {
         Injection injection = injectionRepository.getByIdOrNull(injectionId);
 
         if (injection == null)
-            throw new RuntimeException("Injection is not found with id: " + injectionId);
+            throw new CorvusException("Injection is not found with id: " + injectionId);
 
         checkOwner(injection, user);
 
         if (injection.getStatus() != InjectionStatus.READY)
-            throw new RuntimeException("Injection is not ready");
+            throw new CorvusException("Injection is not ready");
 
         DocumentFormat outputFormat = injection.getOutputFormat();
         InjectorResponse response = injector.inject(
-            InjectionRequest.builder()
-                .data(sourceService.loadData(injection.getDataSource()))
-                .template(sourceService.loadTemplate(injection.getTemplateSource()))
-                .outputFormat(outputFormat)
-                .build()
+            new InjectionRequest(
+                sourceService.loadTemplate(injection.getTemplateSource()),
+                sourceService.loadData(injection.getDataSource()),
+                outputFormat
+            )
         );
 
         FileSource resultSource = new FileSource();
@@ -292,9 +319,36 @@ public class RepositoryInjectionService implements InjectionService {
     }
 
     @Override
+    public FileSource validate(Integer injectionId, User user) {
+        Injection injection = injectionRepository.getByIdOrNull(injectionId);
+
+        if (injection == null)
+            throw new CorvusException("Injection is not found with id: " + injectionId);
+
+        checkOwner(injection, user);
+
+        var templateSource = injection.getTemplateSource();
+        if (templateSource == null)
+            throw new CorvusException("Cannot validate injection without template");
+        var template = sourceService.loadTemplate(templateSource);
+
+        var dataSource = injection.getDataSource();
+        var data = dataSource == null ? ObjectValueDescriptor.empty() : sourceService.loadData(dataSource);
+
+        InjectorResponse response = injector.validate(new InjectionRequest(template, data));
+
+        FileSource validatedSource = new FileSource();
+        validatedSource.setContent(response.getDocument());
+        validatedSource.setName("Validated " + template.getName());
+        validatedSource.guessExtension();
+
+        return validatedSource;
+    }
+
+    @Override
     public InjectionQueue.Change copy(Integer injectionId, User user) {
         Injection copying = injectionRepository.getByIdOrNull(injectionId);
-        if (copying == null) throw new NullPointerException("Injection with id " + injectionId + " is not found.");
+        if (copying == null) throw new CorvusException("Injection with id " + injectionId + " is not found.");
 
         checkOwner(copying, user);
 
@@ -332,7 +386,7 @@ public class RepositoryInjectionService implements InjectionService {
     @Override
     public InjectionQueue.Change remove(Integer injectionId, User user) {
         Injection injection = injectionRepository.getByIdOrNull(injectionId);
-        if (injection == null) throw new NullPointerException("Injection with id " + injectionId + " is not found.");
+        if (injection == null) throw new CorvusException("Injection with id " + injectionId + " is not found.");
 
         checkOwner(injection, user);
 

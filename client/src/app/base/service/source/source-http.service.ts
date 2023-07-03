@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {map, Observable, of} from "rxjs";
+import {map, Observable} from "rxjs";
 import environment from "../../../../../env/environment";
 import {HttpClient} from "@angular/common/http";
 import {downloadBlob} from "../../util/browser";
@@ -21,10 +21,5 @@ export class SourceHttpService {
                 downloadBlob(response);
             })
         );
-    }
-
-    public validateTemplate(sourceId: number): Observable<void> {
-        window.open(encodeURI(`${this.root}/validate/template?sourceId=${sourceId}`));
-        return of(undefined);
     }
 }

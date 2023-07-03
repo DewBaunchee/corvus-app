@@ -16,14 +16,6 @@ export class SourceEffects {
         map(NoAction)
     ));
 
-    public readonly validateTemplate = createEffect(() => this.actions$.pipe(
-        ofType(SourceActions.validateTemplate),
-        exhaustMap(({sourceId}) =>
-            this.sourceService.validateTemplate(sourceId)
-        ),
-        map(NoAction)
-    ));
-
     constructor(
         private readonly actions$: Actions,
         private readonly sourceService: SourceService

@@ -19,10 +19,4 @@ public class SourceController {
     public ResponseEntity<byte[]> downloadSource(@RequestParam Long id) {
         return sourceService.download(id);
     }
-
-    @GetMapping("validate/template")
-    @ResponseBody
-    public ResponseEntity<byte[]> validateTemplate(@RequestParam Long sourceId) {
-        return sourceService.download(sourceId);
-    }
 }

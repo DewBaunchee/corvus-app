@@ -10,8 +10,4 @@ export class SourceService {
     public downloadSource(id: number) {
         return this.http.downloadSource(id);
     }
-
-    public validateTemplate(sourceId: number) {
-        return this.http.validateTemplate(sourceId);
-    }
 }
